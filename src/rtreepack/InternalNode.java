@@ -44,7 +44,7 @@ public class InternalNode extends Node
 	public String toString() 
 	{
 		return "InternalNode [m=" + m + ", M=" + M + ", right=" + right
-				+ ", entries=" + entries + ", lsn=" + lsn + ", bounds="
+				+ ", \nentries=" + entries + ", lsn=" + lsn + ", bounds="
 				+ bounds + "]";
 	}
 
