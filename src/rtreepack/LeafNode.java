@@ -12,6 +12,13 @@ public class LeafNode extends Node
 		this.bounds = bounds;
 	}
 
+	@Override
+	public String toString() 
+	{
+		return "LeafNode [m=" + m + ", M=" + M + ", lsn=" + lsn + ", bounds="
+				+ bounds + "]";
+	}
+
 	public void updateBounds() 
 	{
 		

@@ -8,13 +8,14 @@ public class Rectangle
 	
 	protected ArrayList<Interval> intervals;
 	
-	public Rectangle(int dimensions)
+	public Rectangle(int dimensions, int... lowHigh)
 	{
 		this.dimensions = dimensions;
 		intervals = new ArrayList<Interval>();
 		for(int i=0;i<dimensions;i++)
 		{
-			intervals.add(new Interval());
+			int index = 2*i;
+			intervals.add(new Interval(lowHigh[index],lowHigh[index+1]));
 		}
 	}
 

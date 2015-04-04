@@ -40,10 +40,12 @@ public class InternalNode extends Node
 		}
 	}
 
+	@Override
 	public String toString() 
 	{
 		return "InternalNode [m=" + m + ", M=" + M + ", right=" + right
-				+ ", entries=" + entries + "]";
+				+ ", entries=" + entries + ", lsn=" + lsn + ", bounds="
+				+ bounds + "]";
 	}
 
 }
