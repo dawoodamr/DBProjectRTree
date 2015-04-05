@@ -58,6 +58,53 @@ public class RTree
 		}
 		
 	}
+	
+	void findLeaf(InternalNode n, int lsnExpected, Rectangle rec, Stack<InternalNode> stack)
+	{
+		if(n.entries.getFirst().getClass().getSimpleName() == "LeafNode")
+		{
+			// w lock n
+		}else
+		{
+			// r lock n
+		}
+		if(n.lsn < lsnExpected)
+		{
+			// get geometrically optimal node on the right link chain for rec
+			InternalNode temp = n;
+			int change = Integer.MAX_VALUE;
+			InternalNode best = n;
+			while(!(temp.lsn == lsnExpected))
+			{
+				if(temp.bounds.enlargement(rec) < change)
+				{
+					change = temp.bounds.enlargement(rec);
+					best = temp;
+				}
+				temp = temp.right;
+			}
+			n = best;
+		}
+		if(n.entries.getFirst().node.getClass().getSimpleName() == "LeafNode")
+		{
+			stack.push(n);
+		}else{
+			// get geometrically best entry
+			Entry best = n.entries.getFirst();
+			int change = Integer.MAX_VALUE;
+			for(int i=0;i<n.entries.size();i++)
+			{
+				if(n.entries.get(i).node.bounds.enlargement(rec) < change)
+				{
+					change = n.entries.get(i).node.bounds.enlargement(rec);
+					best = n.entries.get(i);
+				}
+			}
+			stack.push(n);
+			findLeaf((InternalNode) best.node, best.lsnExpected, rec, stack);
+		}
+		
+	}
 
 	public String toString() 
 	{

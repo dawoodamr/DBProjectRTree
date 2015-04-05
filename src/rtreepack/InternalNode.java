@@ -5,7 +5,7 @@ import java.util.LinkedList;
 public class InternalNode extends Node 
 {
 	int m, M;
-	Node right;
+	InternalNode right;
 	LinkedList<Entry> entries;
 	
 	public InternalNode(int m, int M, int lsn, Rectangle bounds) 
