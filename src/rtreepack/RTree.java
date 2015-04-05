@@ -55,6 +55,8 @@ public class RTree
 			if(!rtemp.equals(leaf.bounds))
 			{
 				//update parent
+			}else{
+				// w unlock leaf
 			}
 		}
 		
@@ -75,7 +77,7 @@ public class RTree
 			InternalNode temp = n;
 			int change = Integer.MAX_VALUE;
 			InternalNode best = n;
-			while(!(temp.lsn == lsnExpected))
+			while(temp.lsn != lsnExpected)
 			{
 				if(temp.bounds.enlargement(rec) < change)
 				{
@@ -84,7 +86,9 @@ public class RTree
 				}
 				temp = temp.right;
 			}
+			// unlock n
 			n = best;
+			// lock n
 		}
 		if(n.entries.getFirst().node.getClass().getSimpleName() == "LeafNode")
 		{
@@ -102,11 +106,53 @@ public class RTree
 				}
 			}
 			stack.push(n);
+			// r unlock n
 			findLeaf((InternalNode) best.node, best.lsnExpected, rec, stack);
 		}
 		
 	}
 
+	void updateParent(InternalNode p, Stack<InternalNode> stack)
+	{
+		if(stack.isEmpty())
+		{
+			// w unlock p
+		}
+		else
+		{
+			InternalNode parent = stack.pop();
+			// w lock parent
+			Entry e = parent.entries.getFirst();
+			boolean found = false;
+			while(parent.right != null)
+			{
+				for(int i=0;i<parent.entries.size();i++)
+				{
+					if(parent.entries.get(i).node == p)
+					{
+						e = parent.entries.get(i);
+						found = true;
+						break;
+					}
+				}
+				if(found)
+					break;
+				// w unlock parent
+				parent = parent.right;
+				// w lock parent
+			}
+			e.node.bounds = p.bounds;
+			// w unlock p
+			Rectangle rtemp = parent.bounds.Clone();
+			parent.updateBounds();
+			if(rtemp != parent.bounds)
+				updateParent(parent, stack);
+			else{
+				// w unlock parent
+			}
+		}
+	}
+	
 	public String toString() 
 	{
 		return "RTree [m=" + m + ", M=" + M + ", dimensions=" + dimensions
