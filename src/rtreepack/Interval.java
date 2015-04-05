@@ -14,4 +14,14 @@ public class Interval
 	{
 		return "Interval [Low=" + Low + ", High=" + High + "]";
 	}
+
+	public Interval Clone() 
+	{
+		return new Interval(Low, High);
+	}
+	
+	public boolean equals(Interval v)
+	{
+		return this.Low==v.Low && this.High==v.High;
+	}
 }

@@ -12,11 +12,12 @@ public class Rectangle
 	{
 		this.dimensions = dimensions;
 		intervals = new ArrayList<Interval>();
-		for(int i=0;i<dimensions;i++)
-		{
-			int index = 2*i;
-			intervals.add(new Interval(lowHigh[index],lowHigh[index+1]));
-		}
+		if(lowHigh.length>0)
+			for(int i=0;i<dimensions;i++)
+			{
+				int index = 2*i;
+				intervals.add(new Interval(lowHigh[index],lowHigh[index+1]));
+			}
 	}
 	
 	/**
@@ -72,6 +73,55 @@ public class Rectangle
 	{
 		return "Rectangle [dimensions=" + dimensions + ", intervals="
 				+ intervals + "]";
+	}
+
+	public Rectangle Clone() 
+	{
+		ArrayList<Interval> temp = new ArrayList<Interval>();
+		for(int i=0;i<dimensions;i++)
+		{
+			temp.add(intervals.get(i).Clone());
+		}
+		Rectangle result = new Rectangle(dimensions);
+		result.intervals = temp;
+		return result;
+	}
+
+	public boolean equals(Rectangle rec) 
+	{
+		if(this.dimensions != rec.dimensions)
+			return false;
+		
+		for(int i=0;i<this.dimensions;i++)
+		{
+			boolean result = false;
+			for(int j=0;j<rec.dimensions;j++)
+			{
+				if(this.intervals.get(i).equals(rec.intervals.get(j)))
+				{
+					result = true;
+					break;
+				}
+			}
+			if(! result)
+				return false;
+		}
+		for(int i=0;i<rec.dimensions;i++)
+		{
+			boolean result = false;
+			for(int j=0;j<this.dimensions;j++)
+			{
+				if(this.intervals.get(j).equals(rec.intervals.get(i)))
+				{
+					result = true;
+					break;
+				}
+			}
+			if(! result)
+				return false;
+		}
+		
+		return true;
 	}
 	
 }

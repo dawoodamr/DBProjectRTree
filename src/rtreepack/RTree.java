@@ -1,5 +1,7 @@
 package rtreepack;
 
+import java.util.Stack;
+
 public class RTree 
 {
 	int m, M;
@@ -15,17 +17,46 @@ public class RTree
 		root = new InternalNode(m, M, lsnCount++, new Rectangle(dimensions, 0, 0, 0, 0));
 	}
 	
-	
 	public static void main(String[] args)
 	{
 		RTree tree = new RTree(1, 3, 2);
 		tree.root.entries.add(new Entry(
 				new InternalNode(tree.m, tree.M, lsnCount, 
 						new Rectangle(tree.dimensions, 3, 4, 2, 6)), lsnCount++));
-		Rectangle c = new Rectangle(3, 3,6,3,6,3,6);
-		Rectangle r = new Rectangle(3, 0,2,2,7,1,8);
 		System.out.println("Hello RTree: "+tree.toString());
-		System.out.println(c.getArea()+"  "+r.getArea());
+		Rectangle c = new Rectangle(3, 2,3,2,3,4,5);
+		Rectangle cl = new Rectangle(3, 2,3,4,5,6,7);
+		System.out.println(cl.equals(c));
+	}
+	
+	public void insert(Rectangle rec)
+	{
+		Stack<InternalNode> stack = new Stack<InternalNode>();// = findLeaf(rec);
+		InternalNode leaf = stack.pop();
+		LeafNode n = new LeafNode(m, M, lsnCount++, rec);
+		Entry e = new Entry(n, n.lsn);
+		leaf.entries.add(e);
+		if(leaf.entries.size() > M)
+		{
+			InternalNode right = new InternalNode(m, M, lsnCount++, rec);
+			leaf.right = right;
+			// split
+			for(int i=0;i<M/2;i++)
+			{
+				right.entries.addFirst(leaf.entries.removeLast());
+			}
+			leaf.updateBounds();
+			right.updateBounds();
+			// extendParent()
+		}else{
+			Rectangle rtemp = leaf.bounds.Clone();
+			leaf.updateBounds();
+			if(!rtemp.equals(leaf.bounds))
+			{
+				//update parent
+			}
+		}
+		
 	}
 
 	public String toString() 
