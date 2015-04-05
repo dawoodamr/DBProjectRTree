@@ -31,7 +31,8 @@ public class RTree
 	
 	public void insert(Rectangle rec)
 	{
-		Stack<InternalNode> stack = new Stack<InternalNode>();// = findLeaf(rec);
+		Stack<InternalNode> stack = new Stack<InternalNode>();
+		findLeaf(root, root.lsn, rec, stack);
 		InternalNode leaf = stack.pop();
 		LeafNode n = new LeafNode(m, M, lsnCount++, rec);
 		Entry e = new Entry(n, n.lsn);
