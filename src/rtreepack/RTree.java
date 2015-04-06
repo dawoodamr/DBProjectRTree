@@ -164,7 +164,7 @@ public class RTree
 		{
 			InternalNode parent = stack.pop();
 			// w lock parent
-			Entry e = parent.entries.getFirst();
+		//	Entry e = parent.entries.getFirst();
 			boolean found = false;
 			while(parent != null)
 			{
@@ -172,7 +172,7 @@ public class RTree
 				{
 					if(parent.entries.get(i).node == p)
 					{
-						e = parent.entries.get(i);
+					//	e = parent.entries.get(i);
 						found = true;
 						break;
 					}
@@ -183,7 +183,7 @@ public class RTree
 				parent = parent.right;
 				// w lock parent
 			}
-			e.node.bounds = p.bounds;
+			//e.node.bounds = p.bounds;
 			// w unlock p
 			Rectangle rtemp = parent.bounds.Clone();
 			parent.updateBounds();
