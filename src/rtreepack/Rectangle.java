@@ -76,7 +76,7 @@ public class Rectangle
 	public String toString() 
 	{
 		//return "Rectangle [dimensions=" + dimensions + ", intervals=" + intervals + "]";
-		return "<" + intervals + ">";
+		return intervals.toString();
 	}
 
 	public Rectangle Clone() 

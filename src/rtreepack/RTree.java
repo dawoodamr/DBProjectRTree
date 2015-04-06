@@ -21,11 +21,37 @@ public class RTree
 	public static void main(String[] args)
 	{
 		RTree tree = new RTree(1, 3, 2);
+		LinkedList<Node> queue = new LinkedList<Node>();
+		Rectangle r8 = new Rectangle(2, 1,2,11,13);
+		Rectangle r9 = new Rectangle(2, 5,6,15,16);
+		Rectangle r10 = new Rectangle(2, 5,6,12,14);
+		Rectangle r11 = new Rectangle(2, 8,10,5,17);
+		Rectangle r12 = new Rectangle(2, 4,9,9,11);
+		Rectangle r13 = new Rectangle(2, 12,13,9,16);
+		Rectangle r14 = new Rectangle(2, 11,13,11,13);
+		Rectangle r15 = new Rectangle(2, 0,1,0,3);
+		Rectangle r16 = new Rectangle(2, 2,7,2,8);
+		Rectangle r17 = new Rectangle(2, 14,19,6,9);
+		Rectangle r18 = new Rectangle(2, 15,17,1,10);
+		Rectangle r19 = new Rectangle(2, 16,18,4,7);
+		tree.insert(r19);tree.insert(r18);tree.insert(r17);
+		tree.insert(r16);tree.insert(r15);tree.insert(r14);
+		tree.insert(r13);tree.insert(r12);tree.insert(r11);
+		tree.insert(r10);tree.insert(r9);tree.insert(r8);
+		queue.add(tree.root);
+		queue.add(new InternalNode(tree.m, tree.M, Integer.MAX_VALUE, tree.root.bounds));
+		tree.printRTree(queue);
+		queue.add(tree.root);
+		queue.add(new InternalNode(tree.m, tree.M, Integer.MAX_VALUE, tree.root.bounds));
+		tree.printHybrid(queue);
+		/*queue.add(tree.root);
+		queue.add(new InternalNode(tree.m, tree.M, Integer.MAX_VALUE, tree.root.bounds));
+		tree.printBounds(queue);
 		/*tree.root.entries.add(new Entry(
 				new LeafNode(tree.m, tree.M, tree.lsnCount, tree.root.bounds.Clone()),tree.lsnCount++));
 		tree.root.entries.add(new Entry(
 				new InternalNode(tree.m, tree.M, lsnCount, 
-						new Rectangle(tree.dimensions, 3, 4, 2, 6)), lsnCount++));*/
+						new Rectangle(tree.dimensions, 3, 4, 2, 6)), lsnCount++));
 		tree.insert(new Rectangle(2, 2,3,4,5));
 		tree.insert(new Rectangle(2, 2,3,4,5));
 		tree.insert(new Rectangle(2, 2,3,4,5));
@@ -42,7 +68,7 @@ public class RTree
 		queue.addLast(new InternalNode(tree.m, tree.M, Integer.MAX_VALUE, tree.root.bounds));
 		tree.printBounds(queue);
 		Rectangle r = new Rectangle(2, 2,2,5,5);
-		System.out.println(tree.search(r));
+		System.out.println(tree.search(r));*/
 	}
 	
 	public void insert(Rectangle rec)
@@ -55,7 +81,8 @@ public class RTree
 		leaf.entries.add(e);
 		if(leaf.entries.size() > M)
 		{
-			InternalNode right = new InternalNode(m, M, lsnCount++, rec);
+			InternalNode right = new InternalNode(m, M, leaf.lsn, rec);
+			leaf.lsn = lsnCount++;
 			leaf.right = right;
 			// split
 			for(int i=0;i<(M+1)/2;i++)
@@ -139,7 +166,7 @@ public class RTree
 			// w lock parent
 			Entry e = parent.entries.getFirst();
 			boolean found = false;
-			while(parent.right != null)
+			while(parent != null)
 			{
 				for(int i=0;i<parent.entries.size();i++)
 				{
@@ -183,13 +210,13 @@ public class RTree
 		}else{
 			InternalNode parent = stack.pop();
 			// w lock parent
-			Entry e = parent.entries.getFirst();
+			Entry e = null;//parent.entries.getFirst();
 			boolean found = false;
-			while(parent.right != null)
+			while(parent != null)
 			{
 				for(int i=0;i<parent.entries.size();i++)
 				{
-					if(parent.entries.get(i).node == p)
+					if(parent.entries.get(i).node.equals(p))
 					{
 						e = parent.entries.get(i);
 						found = true;
@@ -198,6 +225,7 @@ public class RTree
 				}
 				if(found)
 					break;
+				parent = parent.right;
 			}
 			// w unlock q, p
 			e.lsnExpected = p.lsn;
@@ -205,7 +233,8 @@ public class RTree
 			if(parent.entries.size() > M)
 			{
 				// split
-				InternalNode right = new InternalNode(m, M, lsnCount++, new Rectangle(dimensions));
+				InternalNode right = new InternalNode(m, M, parent.lsn, new Rectangle(dimensions));
+				parent.lsn = lsnCount++;
 				for(int i=0;i<(M+1)/2;i++)
 				{
 					right.entries.addFirst(parent.entries.removeLast());
@@ -292,7 +321,7 @@ public class RTree
 			printRTree(queue);
 			return;
 		}
-		String s = "Node "+n.lsn+" ";
+		String s = "#"+n.lsn+" ";
 		if(n.getClass().getSimpleName().equals("InternalNode"))
 		{
 			InternalNode temp = (InternalNode) n;
@@ -302,6 +331,7 @@ public class RTree
 				s += temp.entries.get(i).lsnExpected + " - ";
 				queue.addLast(temp.entries.get(i).node);
 			}
+			s = s.substring(0, s.length()-3);
 			s += " )   ";
 			if(temp.right == null)
 				queue.addLast(new InternalNode(m, M, Integer.MAX_VALUE,temp.bounds));
@@ -331,11 +361,43 @@ public class RTree
 				//s += temp.entries.get(i).lsnExpected + " - ";
 				queue.addLast(temp.entries.get(i).node);
 			}
+			//s = s.substring(0, s.length()-3);
 			//s += " )   ";
 			if(temp.right == null)
 				queue.addLast(new InternalNode(m, M, Integer.MAX_VALUE,temp.bounds));
 		}
 		System.out.print(s);
 		printBounds(queue);
+	}
+	
+	public void printHybrid(LinkedList<Node> queue)
+	{
+		if(queue.isEmpty())
+			return;
+		Node n = queue.removeFirst();
+		if(n.lsn == Integer.MAX_VALUE)
+		{
+			System.out.println("");
+			printHybrid(queue);
+			return;
+		}
+		String s = "#"+n.lsn+"";
+		if(n.getClass().getSimpleName().equals("InternalNode"))
+		{
+			InternalNode temp = (InternalNode) n;
+			s += ":(";
+			for(int i=0;i<temp.entries.size();i++)
+			{
+				s += temp.entries.get(i).lsnExpected + " - ";
+				queue.addLast(temp.entries.get(i).node);
+			}
+			s = s.substring(0, s.length()-3);
+			s += " )  ";
+			if(temp.right == null)
+				queue.addLast(new InternalNode(m, M, Integer.MAX_VALUE,temp.bounds));
+		}
+		s += n.bounds + "  "; 
+		System.out.print(s);
+		printHybrid(queue);
 	}
 }
