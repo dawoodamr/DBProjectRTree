@@ -12,7 +12,8 @@ public class Interval
 
 	public String toString() 
 	{
-		return "Interval [Low=" + Low + ", High=" + High + "]";
+		//return "Interval [Low=" + Low + ", High=" + High + "]";
+		return "[" + Low + "->" + High + "]";
 	}
 
 	public Interval Clone() 

@@ -15,8 +15,9 @@ public class LeafNode extends Node
 	@Override
 	public String toString() 
 	{
-		return "LeafNode [m=" + m + ", M=" + M + ", lsn=" + lsn + ", bounds="
-				+ bounds + "]";
+		/*return "LeafNode [m=" + m + ", M=" + M + ", lsn=" + lsn + ", bounds="
+				+ bounds + "]";*/
+		return "LeafNode [lsn=" + lsn + ", bounds=" + bounds + "]";
 	}
 
 	public void updateBounds() 

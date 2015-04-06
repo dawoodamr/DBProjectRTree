@@ -75,8 +75,8 @@ public class Rectangle
 	
 	public String toString() 
 	{
-		return "Rectangle [dimensions=" + dimensions + ", intervals="
-				+ intervals + "]";
+		//return "Rectangle [dimensions=" + dimensions + ", intervals=" + intervals + "]";
+		return "<" + intervals + ">";
 	}
 
 	public Rectangle Clone() 

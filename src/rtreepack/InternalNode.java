@@ -43,9 +43,11 @@ public class InternalNode extends Node
 	@Override
 	public String toString() 
 	{
-		return "InternalNode [m=" + m + ", M=" + M + ", right=" + right
+		/*return "InternalNode [m=" + m + ", M=" + M + ", right=" + right
 				+ ", \n entries=" + entries + ", lsn=" + lsn + ", bounds="
-				+ bounds + "]";
+				+ bounds + "]";*/
+		return "InternalNode [right=" + right + ", \n entries=" + entries + ", lsn=" + lsn + ", bounds="
+		+ bounds + "]"; 
 	}
 
 }

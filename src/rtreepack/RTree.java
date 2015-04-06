@@ -58,7 +58,7 @@ public class RTree
 			InternalNode right = new InternalNode(m, M, lsnCount++, rec);
 			leaf.right = right;
 			// split
-			for(int i=0;i<M/2;i++)
+			for(int i=0;i<(M+1)/2;i++)
 			{
 				right.entries.addFirst(leaf.entries.removeLast());
 			}
@@ -206,7 +206,7 @@ public class RTree
 			{
 				// split
 				InternalNode right = new InternalNode(m, M, lsnCount++, new Rectangle(dimensions));
-				for(int i=0;i<M/2;i++)
+				for(int i=0;i<(M+1)/2;i++)
 				{
 					right.entries.addFirst(parent.entries.removeLast());
 				}
