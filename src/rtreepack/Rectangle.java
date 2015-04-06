@@ -128,4 +128,15 @@ public class Rectangle
 		return true;
 	}
 	
+	public boolean intersecting(Rectangle rec)
+	{
+		for(int i=0;i<dimensions;i++)
+		{
+			if(! this.intervals.get(i).intersecting(rec.intervals.get(i)))
+				return false;
+		}
+		
+		return true;
+	}
+	
 }

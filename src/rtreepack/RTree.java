@@ -41,6 +41,8 @@ public class RTree
 		queue.addLast(tree.root);
 		queue.addLast(new InternalNode(tree.m, tree.M, Integer.MAX_VALUE, tree.root.bounds));
 		tree.printBounds(queue);
+		Rectangle r = new Rectangle(2, 2,2,5,5);
+		System.out.println(tree.search(r));
 	}
 	
 	public void insert(Rectangle rec)
@@ -221,6 +223,54 @@ public class RTree
 				{
 					// w unlock parent
 				}
+			}
+		}
+	}
+	
+	LinkedList<LeafNode> search(Rectangle rec)
+	{
+		LinkedList<LeafNode> result = new LinkedList<LeafNode>();
+		Stack<Integer> lsns = new Stack<Integer>();
+		Stack<Node> stack = new Stack<Node>();
+		stack.push(root);
+		lsns.push(root.lsn);
+		reduceStack(rec, stack, lsns, result);
+		return result;
+	}
+	
+	void reduceStack(Rectangle rec, Stack<Node> stack, Stack<Integer> lsns, LinkedList<LeafNode> result)
+	{
+		while(! stack.isEmpty())
+		{
+			Node p1 = stack.pop();
+			int lsn = lsns.pop();
+			if(p1.getClass().getSimpleName().equals("LeafNode"))
+			{
+				result.add((LeafNode) p1);
+			}else{
+				InternalNode p = (InternalNode) p1;
+				// r lock p
+				if(lsn < p.lsn)
+				{
+					InternalNode n = p.right;
+					while(n != null && n.lsn != lsn)
+					{
+						// r lock n
+						stack.push(n);
+						lsns.push(n.lsn);
+						// r unlock n
+						n = n.right;
+					}
+				}
+				for(int i=0;i<p.entries.size();i++)
+				{
+					if(p.entries.get(i).node.bounds.intersecting(rec))
+					{
+						stack.push(p.entries.get(i).node);
+						lsns.push(p.entries.get(i).lsnExpected);
+					}
+				}
+				// r unlock p
 			}
 		}
 	}
