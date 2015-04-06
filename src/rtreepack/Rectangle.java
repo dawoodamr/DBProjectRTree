@@ -12,12 +12,16 @@ public class Rectangle
 	{
 		this.dimensions = dimensions;
 		intervals = new ArrayList<Interval>();
-		if(lowHigh.length>0)
-			for(int i=0;i<dimensions;i++)
+		for(int i=0;i<dimensions;i++)
+		{
+			if(lowHigh.length == 0)
+				intervals.add(new Interval(0,0));
+			else
 			{
 				int index = 2*i;
 				intervals.add(new Interval(lowHigh[index],lowHigh[index+1]));
 			}
+		}
 	}
 	
 	/**
