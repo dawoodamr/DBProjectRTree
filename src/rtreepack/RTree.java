@@ -60,7 +60,7 @@ public class RTree
 		LinkedList<LeafNode> list = new LinkedList<LeafNode>();
 		new Searcher(r, list, tree);
 		System.out.println("Search: " + list.size() + " : " + list);
-		System.out.println(r.contains(r17));
+		//System.out.println(r.contains(r17));
 		/*queue.add(tree.root);
 		queue.add(new InternalNode(tree.m, tree.M, Integer.MAX_VALUE, tree.root.bounds));
 		tree.printBounds(queue);
@@ -110,8 +110,8 @@ public class RTree
 		if(leaf.entries.size() > M)
 		{
 			InternalNode right = new InternalNode(m, M, leaf.lsn, rec);
-			leaf.lsn = lsnCount++;
 			right.rwl.writeLock().lock();
+			leaf.lsn = lsnCount++;
 			leaf.right = right;
 			// split
 			for(int i=0;i<(M+1)/2;i++)
@@ -200,7 +200,7 @@ public class RTree
 		if(stack.isEmpty())
 		{
 			// w unlock p
-			//p.rwl.writeLock().unlock();
+			p.rwl.writeLock().unlock();
 		}
 		else
 		{
@@ -230,7 +230,7 @@ public class RTree
 			}
 			//e.node.bounds = p.bounds;
 			// w unlock p
-			//p.rwl.writeLock().unlock();
+			p.rwl.writeLock().unlock();
 			Rectangle rtemp = parent.bounds.Clone();
 			parent.updateBounds();
 			if(!rtemp.equals(parent.bounds))
@@ -246,18 +246,18 @@ public class RTree
 	{
 		if(stack.isEmpty())
 		{
-			InternalNode root = new InternalNode(m, M, lsnCount++, p.bounds.Clone());
-			// w lock root
-			root.rwl.writeLock().lock();
+			InternalNode newroot = new InternalNode(m, M, lsnCount++, p.bounds.Clone());
+			// w lock newroot
+			newroot.rwl.writeLock().lock();
+			// w unlock q, p, root
+			p.rwl.writeLock().unlock();
+			q.rwl.writeLock().unlock();
 			Entry e1 = new Entry(p, p.lsn);
 			Entry e2 = new Entry(q, q.lsn);
-			root.entries.add(e1);
-			root.entries.add(e2);
-			this.root = root;
-			// w unlock q, p, root
-		//	p.rwl.writeLock().unlock();
-		//	q.rwl.writeLock().unlock();
-			root.rwl.writeLock().unlock();
+			newroot.entries.add(e1);
+			newroot.entries.add(e2);
+			this.root = newroot;
+			newroot.rwl.writeLock().unlock();
 		}else{
 			InternalNode parent = stack.pop();
 			// w lock parent
@@ -277,17 +277,20 @@ public class RTree
 				}
 				if(found)
 					break;
+				parent.rwl.writeLock().unlock();
 				parent = parent.right;
+				parent.rwl.writeLock().lock();
 			}
-			// w unlock q, p
-		//	p.rwl.writeLock().unlock();
-		//	q.rwl.writeLock().unlock();
 			e.lsnExpected = p.lsn;
 			parent.entries.add(new Entry(q, q.lsn));
+			// w unlock q, p
+			p.rwl.writeLock().unlock();
+			q.rwl.writeLock().unlock();
 			if(parent.entries.size() > M)
 			{
 				// split
 				InternalNode right = new InternalNode(m, M, parent.lsn, new Rectangle(dimensions));
+				right.rwl.writeLock().lock();
 				parent.lsn = lsnCount++;
 				for(int i=0;i<(M+1)/2;i++)
 				{
