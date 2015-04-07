@@ -34,10 +34,22 @@ public class RTree
 		Rectangle r17 = new Rectangle(2, 14,19,6,9);
 		Rectangle r18 = new Rectangle(2, 15,17,1,10);
 		Rectangle r19 = new Rectangle(2, 16,18,4,7);
-		tree.insert(r19);tree.insert(r18);tree.insert(r17);
+		new Inserter(r19, tree);
+		new Inserter(r18, tree);
+		new Inserter(r17, tree);
+		new Inserter(r16, tree);
+		new Inserter(r15, tree);
+		new Inserter(r14, tree);
+		new Inserter(r13, tree);
+		new Inserter(r12, tree);
+		new Inserter(r11, tree);
+		new Inserter(r10, tree);
+		new Inserter(r9, tree);
+		new Inserter(r8, tree);
+	/*	tree.insert(r19);tree.insert(r18);tree.insert(r17);
 		tree.insert(r16);tree.insert(r15);tree.insert(r14);
 		tree.insert(r13);tree.insert(r12);tree.insert(r11);
-		tree.insert(r10);tree.insert(r9);tree.insert(r8);
+		tree.insert(r10);tree.insert(r9);tree.insert(r8);*/
 		queue.add(tree.root);
 		queue.add(new InternalNode(tree.m, tree.M, Integer.MAX_VALUE, tree.root.bounds));
 		tree.printRTree(queue);
@@ -46,7 +58,7 @@ public class RTree
 		tree.printHybrid(queue);
 		Rectangle r = new Rectangle(2, 0,19,6,7);
 		LinkedList<LeafNode> list = new LinkedList<LeafNode>();
-		new Searcher(r, list, tree).run();
+		new Searcher(r, list, tree);
 		System.out.println("Search: " + list);
 		/*queue.add(tree.root);
 		queue.add(new InternalNode(tree.m, tree.M, Integer.MAX_VALUE, tree.root.bounds));
