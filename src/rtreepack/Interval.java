@@ -35,4 +35,9 @@ public class Interval
 				(v.Low<=this.Low && this.High<=v.High) ||
 				(v.High>=this.Low && this.High>=v.High);
 	}
+	
+	public boolean contains(Interval v)
+	{
+		return this.Low<=v.Low && v.High<=this.High;
+	}
 }

@@ -139,4 +139,15 @@ public class Rectangle
 		return true;
 	}
 	
+	public boolean contains(Rectangle rec)
+	{
+		for(int i=0;i<dimensions;i++)
+		{
+			if(! this.intervals.get(i).contains(rec.intervals.get(i)))
+				return false;
+		}
+		
+		return true;
+	}
+	
 }

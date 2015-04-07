@@ -56,10 +56,11 @@ public class RTree
 		queue.add(tree.root);
 		queue.add(new InternalNode(tree.m, tree.M, Integer.MAX_VALUE, tree.root.bounds));
 		tree.printHybrid(queue);
-		Rectangle r = new Rectangle(2, 0,19,6,7);
+		Rectangle r = new Rectangle(2, 0,19,6,11);
 		LinkedList<LeafNode> list = new LinkedList<LeafNode>();
 		new Searcher(r, list, tree);
-		System.out.println("Search: " + list);
+		System.out.println("Search: " + list.size() + " : " + list);
+		System.out.println(r.contains(r17));
 		/*queue.add(tree.root);
 		queue.add(new InternalNode(tree.m, tree.M, Integer.MAX_VALUE, tree.root.bounds));
 		tree.printBounds(queue);
@@ -85,6 +86,17 @@ public class RTree
 		tree.printBounds(queue);
 		Rectangle r = new Rectangle(2, 2,2,5,5);
 		System.out.println(tree.search(r));*/
+		/*Rectangle r6 = new Rectangle(1, 3,8);
+		Rectangle r5 = new Rectangle(1, 10,11);
+		Rectangle r4 = new Rectangle(1, 7,9);
+		Rectangle r3 = new Rectangle(1, 5,6);
+		Rectangle r2 = new Rectangle(1, 2,4);
+		Rectangle r1 = new Rectangle(1, 0,1);
+		System.out.println(r1.contains(r6));
+		System.out.println(r2.contains(r6));
+		System.out.println(r3.contains(r6));
+		System.out.println(r4.contains(r6));
+		System.out.println(r5.contains(r6));*/
 	}
 	
 	public void insert(Rectangle rec)
@@ -318,7 +330,8 @@ public class RTree
 			int lsn = lsns.pop();
 			if(p1.getClass().getSimpleName().equals("LeafNode"))
 			{
-				result.add((LeafNode) p1);
+				if(rec.contains(p1.bounds))
+					result.add((LeafNode) p1);
 			}else{
 				InternalNode p = (InternalNode) p1;
 				// r lock p
@@ -339,7 +352,7 @@ public class RTree
 				}
 				for(int i=0;i<p.entries.size();i++)
 				{
-					if(p.entries.get(i).node.bounds.intersecting(rec))
+					if(rec.intersecting(p.entries.get(i).node.bounds))
 					{
 						stack.push(p.entries.get(i).node);
 						lsns.push(p.entries.get(i).lsnExpected);
