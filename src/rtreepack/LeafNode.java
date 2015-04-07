@@ -1,5 +1,7 @@
 package rtreepack;
 
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
 public class LeafNode extends Node 
 {
 	int m, M;
@@ -10,6 +12,7 @@ public class LeafNode extends Node
 		this.M = M;
 		this.lsn = lsn;
 		this.bounds = bounds;
+		rwl = new ReentrantReadWriteLock();
 	}
 
 	@Override

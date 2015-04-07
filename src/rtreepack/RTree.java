@@ -8,7 +8,7 @@ public class RTree
 	int m, M;
 	int dimensions;
 	InternalNode root;
-	static int lsnCount = 1;
+	int lsnCount = 1;
 	
 	public RTree(int m, int M, int dimensions)
 	{
@@ -44,6 +44,10 @@ public class RTree
 		queue.add(tree.root);
 		queue.add(new InternalNode(tree.m, tree.M, Integer.MAX_VALUE, tree.root.bounds));
 		tree.printHybrid(queue);
+		Rectangle r = new Rectangle(2, 0,19,6,7);
+		LinkedList<LeafNode> list = new LinkedList<LeafNode>();
+		new Searcher(r, list, tree).run();
+		System.out.println("Search: " + list);
 		/*queue.add(tree.root);
 		queue.add(new InternalNode(tree.m, tree.M, Integer.MAX_VALUE, tree.root.bounds));
 		tree.printBounds(queue);
@@ -83,6 +87,7 @@ public class RTree
 		{
 			InternalNode right = new InternalNode(m, M, leaf.lsn, rec);
 			leaf.lsn = lsnCount++;
+			right.rwl.writeLock().lock();
 			leaf.right = right;
 			// split
 			for(int i=0;i<(M+1)/2;i++)
@@ -99,6 +104,7 @@ public class RTree
 				updateParent(leaf, stack);
 			else{
 				// w unlock leaf
+				leaf.rwl.writeLock().unlock();
 			}
 		}
 		
@@ -109,9 +115,11 @@ public class RTree
 		if(n.entries.isEmpty() || n.entries.getFirst().getClass().getSimpleName().equals("LeafNode"))
 		{
 			// w lock n
+			n.rwl.writeLock().lock();
 		}else
 		{
 			// r lock n
+			n.rwl.readLock().lock();
 		}
 		if(n.lsn < lsnExpected)
 		{
@@ -129,8 +137,16 @@ public class RTree
 				temp = temp.right;
 			}
 			// unlock n
+			if(n.entries.isEmpty() || n.entries.getFirst().getClass().getSimpleName().equals("LeafNode"))
+				n.rwl.writeLock().unlock();
+			else
+				n.rwl.readLock().unlock();
 			n = best;
 			// lock n
+			if(n.entries.isEmpty() || n.entries.getFirst().getClass().getSimpleName().equals("LeafNode"))
+				n.rwl.writeLock().lock();
+			else
+				n.rwl.readLock().lock();
 		}
 		if(n.entries.isEmpty() || n.entries.getFirst().node.getClass().getSimpleName().equals("LeafNode"))
 		{
@@ -149,6 +165,7 @@ public class RTree
 			}
 			stack.push(n);
 			// r unlock n
+			n.rwl.readLock().unlock();
 			findLeaf((InternalNode) best.node, best.lsnExpected, rec, stack);
 		}
 		
@@ -159,11 +176,13 @@ public class RTree
 		if(stack.isEmpty())
 		{
 			// w unlock p
+			//p.rwl.writeLock().unlock();
 		}
 		else
 		{
 			InternalNode parent = stack.pop();
 			// w lock parent
+			parent.rwl.writeLock().lock();
 		//	Entry e = parent.entries.getFirst();
 			boolean found = false;
 			while(parent != null)
@@ -180,17 +199,21 @@ public class RTree
 				if(found)
 					break;
 				// w unlock parent
+				parent.rwl.writeLock().unlock();
 				parent = parent.right;
 				// w lock parent
+				parent.rwl.writeLock().lock();
 			}
 			//e.node.bounds = p.bounds;
 			// w unlock p
+			//p.rwl.writeLock().unlock();
 			Rectangle rtemp = parent.bounds.Clone();
 			parent.updateBounds();
 			if(!rtemp.equals(parent.bounds))
 				updateParent(parent, stack);
 			else{
 				// w unlock parent
+				parent.rwl.writeLock().unlock();
 			}
 		}
 	}
@@ -201,15 +224,20 @@ public class RTree
 		{
 			InternalNode root = new InternalNode(m, M, lsnCount++, p.bounds.Clone());
 			// w lock root
+			root.rwl.writeLock().lock();
 			Entry e1 = new Entry(p, p.lsn);
 			Entry e2 = new Entry(q, q.lsn);
 			root.entries.add(e1);
 			root.entries.add(e2);
 			this.root = root;
 			// w unlock q, p, root
+		//	p.rwl.writeLock().unlock();
+		//	q.rwl.writeLock().unlock();
+			root.rwl.writeLock().unlock();
 		}else{
 			InternalNode parent = stack.pop();
 			// w lock parent
+			parent.rwl.writeLock().lock();
 			Entry e = null;//parent.entries.getFirst();
 			boolean found = false;
 			while(parent != null)
@@ -228,6 +256,8 @@ public class RTree
 				parent = parent.right;
 			}
 			// w unlock q, p
+		//	p.rwl.writeLock().unlock();
+		//	q.rwl.writeLock().unlock();
 			e.lsnExpected = p.lsn;
 			parent.entries.add(new Entry(q, q.lsn));
 			if(parent.entries.size() > M)
@@ -251,6 +281,7 @@ public class RTree
 				else
 				{
 					// w unlock parent
+					parent.rwl.writeLock().unlock();
 				}
 			}
 		}
@@ -279,15 +310,18 @@ public class RTree
 			}else{
 				InternalNode p = (InternalNode) p1;
 				// r lock p
+				p.rwl.readLock().lock();
 				if(lsn < p.lsn)
 				{
 					InternalNode n = p.right;
 					while(n != null && n.lsn != lsn)
 					{
 						// r lock n
+						n.rwl.readLock().lock();
 						stack.push(n);
 						lsns.push(n.lsn);
 						// r unlock n
+						n.rwl.readLock().unlock();
 						n = n.right;
 					}
 				}
@@ -300,6 +334,7 @@ public class RTree
 					}
 				}
 				// r unlock p
+				p.rwl.readLock().unlock();
 			}
 		}
 	}

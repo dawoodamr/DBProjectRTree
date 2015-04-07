@@ -1,9 +1,12 @@
 package rtreepack;
 
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
 public abstract class Node 
 {
 	int lsn;
 	Rectangle bounds;
+	ReentrantReadWriteLock rwl;
 	
 	public abstract void updateBounds();
 

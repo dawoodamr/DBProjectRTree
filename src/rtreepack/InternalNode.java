@@ -1,6 +1,7 @@
 package rtreepack;
 
 import java.util.LinkedList;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class InternalNode extends Node 
 {
@@ -15,6 +16,7 @@ public class InternalNode extends Node
 		this.lsn = lsn;
 		this.bounds = bounds;
 		entries = new LinkedList<Entry>();
+		rwl = new ReentrantReadWriteLock();
 	}
 
 	public void updateBounds() 
