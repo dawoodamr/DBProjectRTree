@@ -46,7 +46,7 @@ public class RTree
 		new Inserter(r10, tree);
 		new Inserter(r9, tree);
 		new Inserter(r8, tree);
-	/*	tree.insert(r19);tree.insert(r18);tree.insert(r17);
+		/*tree.insert(r19);tree.insert(r18);tree.insert(r17);
 		tree.insert(r16);tree.insert(r15);tree.insert(r14);
 		tree.insert(r13);tree.insert(r12);tree.insert(r11);
 		tree.insert(r10);tree.insert(r9);tree.insert(r8);*/
