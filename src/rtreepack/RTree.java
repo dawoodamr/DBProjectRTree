@@ -34,6 +34,7 @@ public class RTree
 		Rectangle r17 = new Rectangle(2, 14,19,6,9);
 		Rectangle r18 = new Rectangle(2, 15,17,1,10);
 		Rectangle r19 = new Rectangle(2, 16,18,4,7);
+		
 		new Inserter(r19, tree);
 		new Inserter(r18, tree);
 		new Inserter(r17, tree);
@@ -51,15 +52,19 @@ public class RTree
 		tree.insert(r13);tree.insert(r12);tree.insert(r11);
 		tree.insert(r10);tree.insert(r9);tree.insert(r8);*/
 		queue.add(tree.root);
-		queue.add(new InternalNode(tree.m, tree.M, Integer.MAX_VALUE, tree.root.bounds));
+		queue.add(new InternalNode(tree.m, tree.M, Integer.MAX_VALUE,
+				tree.root.bounds));
 		tree.printRTree(queue);
-		queue.add(tree.root);
-		queue.add(new InternalNode(tree.m, tree.M, Integer.MAX_VALUE, tree.root.bounds));
-		tree.printHybrid(queue);
-		Rectangle r = new Rectangle(2, 0,19,6,11);
+		/*queue.add(tree.root);
+		queue.add(new InternalNode(tree.m, tree.M, Integer.MAX_VALUE,
+				tree.root.bounds));
+		tree.printHybrid(queue);*/
+		Rectangle r = new Rectangle(2, 0, 19, 6, 11);
 		LinkedList<LeafNode> list = new LinkedList<LeafNode>();
 		new Searcher(r, list, tree);
 		System.out.println("Search: " + list.size() + " : " + list);
+		
+		
 		//System.out.println(r.contains(r17));
 		/*queue.add(tree.root);
 		queue.add(new InternalNode(tree.m, tree.M, Integer.MAX_VALUE, tree.root.bounds));
@@ -131,7 +136,6 @@ public class RTree
 				leaf.rwl.writeLock().unlock();
 			}
 		}
-		
 	}
 	
 	void findLeaf(InternalNode n, int lsnExpected, Rectangle rec, Stack<InternalNode> stack)

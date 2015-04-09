@@ -15,6 +15,7 @@ public class Inserter extends Thread
 	public void run()
 	{
 		tree.insert(rec);
+		System.out.println(tree.search(rec));
 	}
 
 }
