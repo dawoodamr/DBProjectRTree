@@ -136,7 +136,7 @@ public class RTree
 	
 	void findLeaf(InternalNode n, int lsnExpected, Rectangle rec, Stack<InternalNode> stack)
 	{
-		if(n.entries.isEmpty() || n.entries.getFirst().getClass().getSimpleName().equals("LeafNode"))
+		if(n.entries.isEmpty() || n.entries.getFirst().node.getClass().getSimpleName().equals("LeafNode"))
 		{
 			// w lock n
 			n.rwl.writeLock().lock();
@@ -161,13 +161,13 @@ public class RTree
 				temp = temp.right;
 			}
 			// unlock n
-			if(n.entries.isEmpty() || n.entries.getFirst().getClass().getSimpleName().equals("LeafNode"))
+			if(n.entries.isEmpty() || n.entries.getFirst().node.getClass().getSimpleName().equals("LeafNode"))
 				n.rwl.writeLock().unlock();
 			else
 				n.rwl.readLock().unlock();
 			n = best;
 			// lock n
-			if(n.entries.isEmpty() || n.entries.getFirst().getClass().getSimpleName().equals("LeafNode"))
+			if(n.entries.isEmpty() || n.entries.getFirst().node.getClass().getSimpleName().equals("LeafNode"))
 				n.rwl.writeLock().lock();
 			else
 				n.rwl.readLock().lock();
