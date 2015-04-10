@@ -8,11 +8,11 @@ public class Searcher extends Thread
 	Rectangle rec;
 	LinkedList<LeafNode> result;
 	
-	public Searcher(Rectangle rec, LinkedList<LeafNode> result, RTree tree)
+	public Searcher(Rectangle rec, RTree tree)
 	{
 		this.tree = tree;
 		this.rec = rec;
-		this.result = result;
+		result = new LinkedList<LeafNode>();
 		this.start();
 	}
 	
@@ -23,6 +23,7 @@ public class Searcher extends Thread
 		{
 			result.add(r.get(i));
 		}
+			System.out.println("Search: " + result.size() + " : " + result);
 	}
 
 }

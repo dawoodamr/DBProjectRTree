@@ -20,6 +20,8 @@ public class RTree
 	
 	public static void main(String[] args)
 	{
+		
+		
 		RTree tree = new RTree(1, 3, 2);
 		LinkedList<Node> queue = new LinkedList<Node>();
 		Rectangle r8 = new Rectangle(2, 1,2,11,13);
@@ -35,34 +37,40 @@ public class RTree
 		Rectangle r18 = new Rectangle(2, 15,17,1,10);
 		Rectangle r19 = new Rectangle(2, 16,18,4,7);
 		
-		new Inserter(r19, tree);
-		new Inserter(r18, tree);
-		new Inserter(r17, tree);
-		new Inserter(r16, tree);
-		new Inserter(r15, tree);
-		new Inserter(r14, tree);
-		new Inserter(r13, tree);
-		new Inserter(r12, tree);
-		new Inserter(r11, tree);
-		new Inserter(r10, tree);
-		new Inserter(r9, tree);
-		new Inserter(r8, tree);
+		Thread t1 = new Inserter(r19, tree);
+		Thread t2 = new Inserter(r18, tree);
+		Thread t3 = new Inserter(r17, tree);
+		Thread t4 = new Inserter(r16, tree);
+		Thread t5 = new Inserter(r15, tree);
+		Thread t6 = new Inserter(r14, tree);
+		Thread t7 = new Inserter(r13, tree);
+		Thread t8 = new Inserter(r12, tree);
+		Thread t9 = new Inserter(r11, tree);
+		Thread t10 = new Inserter(r10, tree);
+		Thread t11 = new Inserter(r9, tree);
+		Thread t12 = new Inserter(r8, tree);
+		
+		while(t1.getState()!=Thread.State.TERMINATED || t2.getState()!=Thread.State.TERMINATED
+				|| t3.getState()!=Thread.State.TERMINATED || t4.getState()!=Thread.State.TERMINATED
+				|| t5.getState()!=Thread.State.TERMINATED || t6.getState()!=Thread.State.TERMINATED
+				|| t7.getState()!=Thread.State.TERMINATED || t8.getState()!=Thread.State.TERMINATED
+				|| t9.getState()!=Thread.State.TERMINATED || t10.getState()!=Thread.State.TERMINATED
+				|| t11.getState()!=Thread.State.TERMINATED || t12.getState()!=Thread.State.TERMINATED){}
+		
 		/*tree.insert(r19);tree.insert(r18);tree.insert(r17);
 		tree.insert(r16);tree.insert(r15);tree.insert(r14);
 		tree.insert(r13);tree.insert(r12);tree.insert(r11);
 		tree.insert(r10);tree.insert(r9);tree.insert(r8);*/
 		queue.add(tree.root);
-		queue.add(new InternalNode(tree.m, tree.M, Integer.MAX_VALUE,
-				tree.root.bounds));
+		queue.add(new InternalNode(tree.m, tree.M, Integer.MAX_VALUE,tree.root.bounds));
 		tree.printRTree(queue);
 		/*queue.add(tree.root);
 		queue.add(new InternalNode(tree.m, tree.M, Integer.MAX_VALUE,
 				tree.root.bounds));
 		tree.printHybrid(queue);*/
 		Rectangle r = new Rectangle(2, 0, 19, 6, 11);
-		LinkedList<LeafNode> list = new LinkedList<LeafNode>();
-		new Searcher(r, list, tree);
-		System.out.println("Search: " + list.size() + " : " + list);
+		new Searcher(r, tree);
+		//System.out.println("Search: " + list.size() + " : " + list);
 		
 		
 		//System.out.println(r.contains(r17));
