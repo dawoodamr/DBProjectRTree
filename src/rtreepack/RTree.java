@@ -1,12 +1,21 @@
 package rtreepack;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.Random;
 import java.util.Stack;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-public class RTree 
+public class RTree implements Serializable
 {
+	private static final long serialVersionUID = -2216591716780441626L;
+	
 	int m, M;
 	int dimensions;
 	InternalNode root;
@@ -22,11 +31,22 @@ public class RTree
 	
 	public static void main(String[] args)
 	{
-		
-		
-		RTree tree = new RTree(1, 3, 2);
+		RTree tree = null;
 		LinkedList<Node> queue = new LinkedList<Node>();
-		Rectangle r8 = new Rectangle(2, 1,2,11,13);
+		
+		try 
+		{
+			FileInputStream fi = new FileInputStream("RTree");
+			ObjectInputStream oi = new ObjectInputStream(fi);
+			tree = (RTree) oi.readObject();
+			oi.close();
+		} catch (Exception ex) 
+		{
+			ex.printStackTrace();
+		}
+		
+		tree = new RTree(1, 3, 2);
+		/*Rectangle r8 = new Rectangle(2, 1,2,11,13);
 		Rectangle r9 = new Rectangle(2, 5,6,15,16);
 		Rectangle r10 = new Rectangle(2, 5,6,12,14);
 		Rectangle r11 = new Rectangle(2, 8,10,5,17);
@@ -65,22 +85,32 @@ public class RTree
 				|| t11.getState()!=Thread.State.TERMINATED || t12.getState()!=Thread.State.TERMINATED){}
 		*/
 		
-		
-		tree.insert(r19);tree.insert(r18);tree.insert(r17);
+		Random random = new Random();
+		for(int i=0;i<1000;i++)
+		{
+			int size = 4;
+			LinkedList<Integer> l = new LinkedList<Integer>();
+			for(int j=0;j<size;j++)
+				l.add(random.nextInt());
+			Collections.sort(l);
+			tree.insert(new Rectangle(2, l.get(0), l.get(2), l.get(1), l.get(3)));
+		}
+		/*tree.insert(r19);tree.insert(r18);tree.insert(r17);
 		tree.insert(r16);tree.insert(r15);tree.insert(r14);
 		tree.insert(r13);tree.insert(r12);tree.insert(r11);
 		tree.insert(r10);tree.insert(r9);tree.insert(r8);
-		queue.add(tree.root);
-		queue.add(new InternalNode(tree.m, tree.M, Integer.MAX_VALUE,tree.root.bounds));
-		tree.printRTree(queue);
 		/*queue.add(tree.root);
 		queue.add(new InternalNode(tree.m, tree.M, Integer.MAX_VALUE,
 				tree.root.bounds));
 		tree.printHybrid(queue);*/
+		queue.add(tree.root);
+		queue.add(new InternalNode(tree.m, tree.M, Integer.MAX_VALUE,tree.root.bounds));
+		tree.printRTree(queue);
 		Rectangle r = new Rectangle(2, 0, 19, 6, 11);
+		//System.out.println(tree.root);
 		new Searcher(r, tree);
-		new Deleter(r, tree);
-		new Searcher(r, tree);
+		//new Deleter(r, tree);
+		//new Searcher(r, tree);
 		//System.out.println("Search: " + list.size() + " : " + list);
 		
 		
@@ -121,6 +151,18 @@ public class RTree
 		System.out.println(r3.contains(r6));
 		System.out.println(r4.contains(r6));
 		System.out.println(r5.contains(r6));*/
+		
+		try
+		{
+			FileOutputStream f = new FileOutputStream("RTree");
+			ObjectOutputStream o = new ObjectOutputStream(f);
+			o.writeObject(tree);
+			o.close();
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public void insert(Rectangle rec)

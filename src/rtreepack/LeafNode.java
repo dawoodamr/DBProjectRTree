@@ -4,6 +4,8 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class LeafNode extends Node 
 {
+	private static final long serialVersionUID = -4326526835690819196L;
+	
 	int m, M;
 	
 	public LeafNode(int m, int M, int lsn, Rectangle bounds)
@@ -21,7 +23,7 @@ public class LeafNode extends Node
 	{
 		/*return "LeafNode [m=" + m + ", M=" + M + ", lsn=" + lsn + ", bounds="
 				+ bounds + "]";*/
-		return "LeafNode [lsn=" + lsn + ", bounds=" + bounds + "]";
+		return "LeafNode [lsn=" + lsn + ", deleted=" + deleted + ", bounds=" + bounds + "]";
 	}
 
 	public void updateBounds() 

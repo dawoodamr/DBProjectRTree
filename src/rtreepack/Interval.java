@@ -1,7 +1,11 @@
 package rtreepack;
 
-public class Interval 
+import java.io.Serializable;
+
+public class Interval implements Serializable
 {
+	private static final long serialVersionUID = 2292816917223190173L;
+	
 	int Low, High;
 
 	public Interval(int low, int high) 

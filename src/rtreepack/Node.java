@@ -1,9 +1,12 @@
 package rtreepack;
 
+import java.io.Serializable;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-public abstract class Node 
+public abstract class Node implements Serializable
 {
+	private static final long serialVersionUID = -1838418223669710147L;
+	
 	int lsn;
 	Rectangle bounds;
 	boolean deleted;

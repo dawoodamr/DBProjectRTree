@@ -1,9 +1,12 @@
 package rtreepack;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Rectangle 
+public class Rectangle implements Serializable
 {
+	private static final long serialVersionUID = 763214238211012502L;
+
 	final int dimensions;
 	
 	protected ArrayList<Interval> intervals;

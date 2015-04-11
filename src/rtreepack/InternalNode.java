@@ -5,6 +5,8 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class InternalNode extends Node 
 {
+	private static final long serialVersionUID = 4489682376643576188L;
+	
 	int m, M;
 	InternalNode right;
 	LinkedList<Entry> entries;

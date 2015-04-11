@@ -1,7 +1,11 @@
 package rtreepack;
 
-public class Entry 
+import java.io.Serializable;
+
+public class Entry implements Serializable
 {
+	private static final long serialVersionUID = 4850569213309079988L;
+	
 	Node node;
 	int lsnExpected;
 	
