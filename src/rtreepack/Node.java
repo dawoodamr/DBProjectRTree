@@ -6,6 +6,7 @@ public abstract class Node
 {
 	int lsn;
 	Rectangle bounds;
+	boolean deleted;
 	ReentrantReadWriteLock rwl;
 	
 	public abstract void updateBounds();

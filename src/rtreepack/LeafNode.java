@@ -12,6 +12,7 @@ public class LeafNode extends Node
 		this.M = M;
 		this.lsn = lsn;
 		this.bounds = bounds;
+		deleted = false;
 		rwl = new ReentrantReadWriteLock();
 	}
 

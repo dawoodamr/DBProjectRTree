@@ -2,6 +2,8 @@ package rtreepack;
 
 import java.util.LinkedList;
 import java.util.Stack;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class RTree 
 {
@@ -37,7 +39,7 @@ public class RTree
 		Rectangle r18 = new Rectangle(2, 15,17,1,10);
 		Rectangle r19 = new Rectangle(2, 16,18,4,7);
 		
-		Thread t1 = new Inserter(r19, tree);
+		/*Thread t1 = new Inserter(r19, tree);
 		Thread t2 = new Inserter(r18, tree);
 		Thread t3 = new Inserter(r17, tree);
 		Thread t4 = new Inserter(r16, tree);
@@ -50,17 +52,24 @@ public class RTree
 		Thread t11 = new Inserter(r9, tree);
 		Thread t12 = new Inserter(r8, tree);
 		
-		while(t1.getState()!=Thread.State.TERMINATED || t2.getState()!=Thread.State.TERMINATED
+		/*ExecutorService ex = Executors.newCachedThreadPool();
+		ex.submit(t1);ex.submit(t2);ex.submit(t3);ex.submit(t4);ex.submit(t5);ex.submit(t6);
+		ex.submit(t7);ex.submit(t8);ex.submit(t9);ex.submit(t10);ex.submit(t11);ex.submit(t12);
+		ex.shutdown();*/
+		
+		/*while(t1.getState()!=Thread.State.TERMINATED || t2.getState()!=Thread.State.TERMINATED
 				|| t3.getState()!=Thread.State.TERMINATED || t4.getState()!=Thread.State.TERMINATED
 				|| t5.getState()!=Thread.State.TERMINATED || t6.getState()!=Thread.State.TERMINATED
 				|| t7.getState()!=Thread.State.TERMINATED || t8.getState()!=Thread.State.TERMINATED
 				|| t9.getState()!=Thread.State.TERMINATED || t10.getState()!=Thread.State.TERMINATED
 				|| t11.getState()!=Thread.State.TERMINATED || t12.getState()!=Thread.State.TERMINATED){}
+		*/
 		
-		/*tree.insert(r19);tree.insert(r18);tree.insert(r17);
+		
+		tree.insert(r19);tree.insert(r18);tree.insert(r17);
 		tree.insert(r16);tree.insert(r15);tree.insert(r14);
 		tree.insert(r13);tree.insert(r12);tree.insert(r11);
-		tree.insert(r10);tree.insert(r9);tree.insert(r8);*/
+		tree.insert(r10);tree.insert(r9);tree.insert(r8);
 		queue.add(tree.root);
 		queue.add(new InternalNode(tree.m, tree.M, Integer.MAX_VALUE,tree.root.bounds));
 		tree.printRTree(queue);
@@ -69,6 +78,8 @@ public class RTree
 				tree.root.bounds));
 		tree.printHybrid(queue);*/
 		Rectangle r = new Rectangle(2, 0, 19, 6, 11);
+		new Searcher(r, tree);
+		new Deleter(r, tree);
 		new Searcher(r, tree);
 		//System.out.println("Search: " + list.size() + " : " + list);
 		
@@ -345,7 +356,7 @@ public class RTree
 			int lsn = lsns.pop();
 			if(p1.getClass().getSimpleName().equals("LeafNode"))
 			{
-				if(rec.contains(p1.bounds))
+				if(rec.contains(p1.bounds) && ! p1.deleted)
 					result.add((LeafNode) p1);
 			}else{
 				InternalNode p = (InternalNode) p1;
@@ -377,6 +388,18 @@ public class RTree
 				p.rwl.readLock().unlock();
 			}
 		}
+	}
+	
+	void delete(Rectangle rec)
+	{
+		LinkedList<LeafNode> result = new LinkedList<LeafNode>();
+		Stack<Integer> lsns = new Stack<Integer>();
+		Stack<Node> stack = new Stack<Node>();
+		stack.push(root);
+		lsns.push(root.lsn);
+		reduceStack(rec, stack, lsns, result);
+		for(int i=0;i<result.size();i++)
+			result.get(i).deleted = true;
 	}
 	
 	public String toString() 

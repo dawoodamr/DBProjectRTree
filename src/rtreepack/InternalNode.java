@@ -16,6 +16,7 @@ public class InternalNode extends Node
 		this.lsn = lsn;
 		this.bounds = bounds;
 		entries = new LinkedList<Entry>();
+		deleted = false;
 		rwl = new ReentrantReadWriteLock();
 	}
 
