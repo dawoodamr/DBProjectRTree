@@ -13,7 +13,7 @@ public class Searcher extends Thread
 		this.tree = tree;
 		this.rec = rec;
 		result = new LinkedList<LeafNode>();
-		this.start();
+		//this.start();
 	}
 	
 	public void run()

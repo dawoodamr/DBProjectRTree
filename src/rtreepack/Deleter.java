@@ -9,7 +9,7 @@ public class Deleter extends Thread
 	{
 		this.rec = rec;
 		this.tree = tree;
-		this.start();
+		//this.start();
 	}
 	
 	public void run()

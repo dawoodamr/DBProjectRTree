@@ -9,7 +9,7 @@ public class Inserter extends Thread
 	{
 		this.tree = tree;
 		this.rec = rec;
-		this.start();
+		//this.start();
 	}
 	
 	public void run()
