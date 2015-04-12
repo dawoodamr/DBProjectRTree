@@ -1,15 +1,7 @@
 package rtreepack;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.Random;
+import java.io.*;
+import java.util.*;
 import java.util.Stack;
 
 public class RTree implements Serializable
@@ -46,6 +38,7 @@ public class RTree implements Serializable
 		}
 		
 		tree = new RTree(1, 3, 2);
+		
 		/*Rectangle r8 = new Rectangle(2, 1,2,11,13);
 		Rectangle r9 = new Rectangle(2, 5,6,15,16);
 		Rectangle r10 = new Rectangle(2, 5,6,12,14);
@@ -59,20 +52,28 @@ public class RTree implements Serializable
 		Rectangle r18 = new Rectangle(2, 15,17,1,10);
 		Rectangle r19 = new Rectangle(2, 16,18,4,7);
 		
-		/*Thread t1 = new Inserter(r19, tree);
-		Thread t2 = new Inserter(r18, tree);
-		Thread t3 = new Inserter(r17, tree);
-		Thread t4 = new Inserter(r16, tree);
-		Thread t5 = new Inserter(r15, tree);
-		Thread t6 = new Inserter(r14, tree);
-		Thread t7 = new Inserter(r13, tree);
-		Thread t8 = new Inserter(r12, tree);
-		Thread t9 = new Inserter(r11, tree);
-		Thread t10 = new Inserter(r10, tree);
-		Thread t11 = new Inserter(r9, tree);
-		Thread t12 = new Inserter(r8, tree);
+		Inserter t1 = new Inserter(r19, tree);
+		Inserter t2 = new Inserter(r18, tree);
+		Inserter t3 = new Inserter(r17, tree);
+		Inserter t4 = new Inserter(r16, tree);
+		Inserter t5 = new Inserter(r15, tree);
+		Inserter t6 = new Inserter(r14, tree);
+		Inserter t7 = new Inserter(r13, tree);
+		Inserter t8 = new Inserter(r12, tree);
+		Inserter t9 = new Inserter(r11, tree);
+		Inserter t10 = new Inserter(r10, tree);
+		Inserter t11 = new Inserter(r9, tree);
+		Inserter t12 = new Inserter(r8, tree);*/
 		
-		/*ExecutorService ex = Executors.newCachedThreadPool();
+		/*try {
+			t1.join();t2.join();t3.join();t4.join();t5.join();t6.join();
+			t7.join();t8.join();t9.join();t10.join();t11.join();t12.join();
+		} catch (InterruptedException e) 
+		{
+			e.printStackTrace();
+		}*/
+		
+		/*ExecutorService ex = Executors.newFixedThreadPool(12);
 		ex.submit(t1);ex.submit(t2);ex.submit(t3);ex.submit(t4);ex.submit(t5);ex.submit(t6);
 		ex.submit(t7);ex.submit(t8);ex.submit(t9);ex.submit(t10);ex.submit(t11);ex.submit(t12);
 		ex.shutdown();*/
@@ -85,7 +86,10 @@ public class RTree implements Serializable
 				|| t11.getState()!=Thread.State.TERMINATED || t12.getState()!=Thread.State.TERMINATED){}
 		*/
 		
-		Random random = new Random();
+		
+		
+		// RTree file builder >>>>>>>>>>>>>>>>>>>
+		/*Random random = new Random();
 		for(int i=0;i<1000;i++)
 		{
 			int size = 4;
@@ -95,6 +99,9 @@ public class RTree implements Serializable
 			Collections.sort(l);
 			tree.insert(new Rectangle(2, l.get(0), l.get(2), l.get(1), l.get(3)));
 		}
+		
+		
+		
 		/*tree.insert(r19);tree.insert(r18);tree.insert(r17);
 		tree.insert(r16);tree.insert(r15);tree.insert(r14);
 		tree.insert(r13);tree.insert(r12);tree.insert(r11);
@@ -152,7 +159,7 @@ public class RTree implements Serializable
 		System.out.println(r4.contains(r6));
 		System.out.println(r5.contains(r6));*/
 		
-		try
+		/*try
 		{
 			FileOutputStream f = new FileOutputStream("RTree");
 			ObjectOutputStream o = new ObjectOutputStream(f);
@@ -161,7 +168,7 @@ public class RTree implements Serializable
 		}catch(Exception e)
 		{
 			e.printStackTrace();
-		}
+		}*/
 		
 	}
 	

@@ -1,6 +1,6 @@
 package rtreepack;
 
-public class Inserter extends Thread 
+public class Inserter extends Thread
 {
 	RTree tree;
 	Rectangle rec;

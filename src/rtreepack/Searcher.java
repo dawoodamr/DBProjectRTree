@@ -23,7 +23,7 @@ public class Searcher extends Thread
 		{
 			result.add(r.get(i));
 		}
-			System.out.println("Search: " + result.size() + " : " + result);
+			System.out.println("Search for: " + rec + " result: " + result.size() + " : " + result);
 	}
 
 }
