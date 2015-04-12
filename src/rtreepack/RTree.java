@@ -24,9 +24,8 @@ public class RTree implements Serializable
 	public static void main(String[] args)
 	{
 		RTree tree = null;
-		//LinkedList<Node> queue = new LinkedList<Node>();
 		
-		/*try 
+		try 
 		{
 			FileInputStream fi = new FileInputStream("RTree");
 			ObjectInputStream oi = new ObjectInputStream(fi);
@@ -35,12 +34,35 @@ public class RTree implements Serializable
 		} catch (Exception ex) 
 		{
 			ex.printStackTrace();
-		}*/
+		}
 		
-		tree = new RTree(1, 3, 2);
+		
+		/*LinkedList<Node> queue = new LinkedList<Node>();
+		queue.add(tree.root);
+		queue.add(new InternalNode(tree.m, tree.M, Integer.MAX_VALUE,tree.root.bounds));
+		tree.printRTree(queue);*/
+		
+		
+		for(int i=2;i<10000;i*=2)
+			new Builder(tree, i, 0, 0);
+
+		try 
+		{
+			FileInputStream fi = new FileInputStream("RTree");
+			ObjectInputStream oi = new ObjectInputStream(fi);
+			tree = (RTree) oi.readObject();
+			oi.close();
+		} catch (Exception ex) 
+		{
+			ex.printStackTrace();
+		}
+		
 		try{
-		for(int i=10;i<100;i+=10)
-			new Monitor(tree, i, 10, 10).join();
+		for(int i=2;i<10000;i*=2)
+		{
+			//tree = new RTree(1, 3, 2);
+			new Monitor(tree, i, 0, 0).join();
+		}
 		}catch(Exception e)
 		{
 			e.printStackTrace();
