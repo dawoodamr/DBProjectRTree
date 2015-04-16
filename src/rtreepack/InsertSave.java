@@ -1,33 +1,22 @@
 package rtreepack;
 
-import java.io.*;
-
 public class InsertSave extends Thread 
 {
 	RTree tree;
 	Rectangle rec;
+	String saveFileName;
 	
-	public InsertSave(Rectangle rec, RTree tree)
+	public InsertSave(Rectangle rec, RTree tree, String saveFileName)
 	{
 		this.tree = tree;
 		this.rec = rec;
-		this.start();
+		this.saveFileName = saveFileName;
+		//this.start();
 	}
 	
 	public void run()
 	{
 		tree.insert(rec);
-		try
-		{
-			FileOutputStream f = new FileOutputStream("RTree");
-			ObjectOutputStream o = new ObjectOutputStream(f);
-			o.writeObject(tree);
-			o.close();
-		}catch(Exception e)
-		{
-			e.printStackTrace();
-		}
+		tree.save(saveFileName);
 	}
-
-
 }

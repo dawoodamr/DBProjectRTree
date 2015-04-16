@@ -25,6 +25,8 @@ public class RTree implements Serializable
 	{
 		RTree tree = null;
 		
+		int insertions = 65;
+		// serial - save batch
 		try 
 		{
 			FileInputStream fi = new FileInputStream("RTree");
@@ -36,16 +38,25 @@ public class RTree implements Serializable
 			ex.printStackTrace();
 		}
 		
+		for(int i=2;i<insertions;i*=2)
+			new Builder(tree, i, 0, 0, true, "RTree test");
 		
-		/*LinkedList<Node> queue = new LinkedList<Node>();
-		queue.add(tree.root);
-		queue.add(new InternalNode(tree.m, tree.M, Integer.MAX_VALUE,tree.root.bounds));
-		tree.printRTree(queue);*/
+		// serial - save Xacts
+		try 
+		{
+			FileInputStream fi = new FileInputStream("RTree");
+			ObjectInputStream oi = new ObjectInputStream(fi);
+			tree = (RTree) oi.readObject();
+			oi.close();
+		} catch (Exception ex) 
+		{
+			ex.printStackTrace();
+		}
 		
-		
-		for(int i=2;i<10000;i*=2)
-			new Builder(tree, i, 0, 0);
+		for(int i=2;i<insertions;i*=2)
+			new Builder(tree, i, 0, 0, false, "RTree test");
 
+		// concurrent - save batch
 		try 
 		{
 			FileInputStream fi = new FileInputStream("RTree");
@@ -58,15 +69,44 @@ public class RTree implements Serializable
 		}
 		
 		try{
-		for(int i=2;i<10000;i*=2)
+		for(int i=2;i<insertions;i*=2)
 		{
 			//tree = new RTree(1, 3, 2);
-			new Monitor(tree, i, 0, 0).join();
+			new Monitor(tree, i, 0, 0, true, "RTree test").join();
 		}
 		}catch(Exception e)
 		{
 			e.printStackTrace();
 		}
+		
+		// concurrent - save Xacts
+		try 
+		{
+			FileInputStream fi = new FileInputStream("RTree");
+			ObjectInputStream oi = new ObjectInputStream(fi);
+			tree = (RTree) oi.readObject();
+			oi.close();
+		} catch (Exception ex) 
+		{
+			ex.printStackTrace();
+		}
+		
+		try{
+		for(int i=2;i<insertions;i*=2)
+		{
+			//tree = new RTree(1, 3, 2);
+			new Monitor(tree, i, 0, 0, false, "RTree test").join();
+		}
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+
+		/*LinkedList<Node> queue = new LinkedList<Node>();
+		queue.add(tree.root);
+		queue.add(new InternalNode(tree.m, tree.M, Integer.MAX_VALUE,tree.root.bounds));
+		tree.printRTree(queue);*/
 		
 		
 		/*Rectangle r8 = new Rectangle(2, 1,2,11,13);
@@ -483,6 +523,20 @@ public class RTree implements Serializable
 		reduceStack(rec, stack, lsns, result);
 		for(int i=0;i<result.size();i++)
 			result.get(i).deleted = true;
+	}
+	
+	void save(String fileName)
+	{
+		try
+		{
+			FileOutputStream f = new FileOutputStream(fileName);
+			ObjectOutputStream o = new ObjectOutputStream(f);
+			o.writeObject(this);
+			o.close();
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	public String toString() 
