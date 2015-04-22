@@ -2,7 +2,6 @@ package rtreepack;
 
 import java.io.*;
 import java.util.*;
-import java.util.Stack;
 
 public class RTree implements Serializable
 {
@@ -23,50 +22,27 @@ public class RTree implements Serializable
 	
 	public static void main(String[] args)
 	{
-		RTree tree = null;
+		RTree.proveCorrectness();
+		//RTree.buildRTreeToFile(1000, "", 1, 3, 2);
+		
+		/*RTree tree = null;
 		
 		int insertions = 65;
+		
 		// serial - save batch
-		try 
-		{
-			FileInputStream fi = new FileInputStream("RTree");
-			ObjectInputStream oi = new ObjectInputStream(fi);
-			tree = (RTree) oi.readObject();
-			oi.close();
-		} catch (Exception ex) 
-		{
-			ex.printStackTrace();
-		}
+		tree = RTree.readRTree("RTree");
 		
 		for(int i=2;i<insertions;i*=2)
 			new Builder(tree, i, 0, 0, true, "RTree test");
 		
 		// serial - save Xacts
-		try 
-		{
-			FileInputStream fi = new FileInputStream("RTree");
-			ObjectInputStream oi = new ObjectInputStream(fi);
-			tree = (RTree) oi.readObject();
-			oi.close();
-		} catch (Exception ex) 
-		{
-			ex.printStackTrace();
-		}
+		tree = RTree.readRTree("RTree");
 		
 		for(int i=2;i<insertions;i*=2)
 			new Builder(tree, i, 0, 0, false, "RTree test");
 
 		// concurrent - save batch
-		try 
-		{
-			FileInputStream fi = new FileInputStream("RTree");
-			ObjectInputStream oi = new ObjectInputStream(fi);
-			tree = (RTree) oi.readObject();
-			oi.close();
-		} catch (Exception ex) 
-		{
-			ex.printStackTrace();
-		}
+		tree = RTree.readRTree("RTree");
 		
 		try{
 		for(int i=2;i<insertions;i*=2)
@@ -80,16 +56,7 @@ public class RTree implements Serializable
 		}
 		
 		// concurrent - save Xacts
-		try 
-		{
-			FileInputStream fi = new FileInputStream("RTree");
-			ObjectInputStream oi = new ObjectInputStream(fi);
-			tree = (RTree) oi.readObject();
-			oi.close();
-		} catch (Exception ex) 
-		{
-			ex.printStackTrace();
-		}
+		tree = RTree.readRTree("RTree");
 		
 		try{
 		for(int i=2;i<insertions;i*=2)
@@ -100,14 +67,9 @@ public class RTree implements Serializable
 		}catch(Exception e)
 		{
 			e.printStackTrace();
-		}
+		}*/
 		
 
-		/*LinkedList<Node> queue = new LinkedList<Node>();
-		queue.add(tree.root);
-		queue.add(new InternalNode(tree.m, tree.M, Integer.MAX_VALUE,tree.root.bounds));
-		tree.printRTree(queue);*/
-		
 		
 		/*Rectangle r8 = new Rectangle(2, 1,2,11,13);
 		Rectangle r9 = new Rectangle(2, 5,6,15,16);
@@ -143,106 +105,8 @@ public class RTree implements Serializable
 			e.printStackTrace();
 		}*/
 		
-		/*ExecutorService ex = Executors.newFixedThreadPool(12);
-		ex.submit(t1);ex.submit(t2);ex.submit(t3);ex.submit(t4);ex.submit(t5);ex.submit(t6);
-		ex.submit(t7);ex.submit(t8);ex.submit(t9);ex.submit(t10);ex.submit(t11);ex.submit(t12);
-		ex.shutdown();*/
-		
-		/*while(t1.getState()!=Thread.State.TERMINATED || t2.getState()!=Thread.State.TERMINATED
-				|| t3.getState()!=Thread.State.TERMINATED || t4.getState()!=Thread.State.TERMINATED
-				|| t5.getState()!=Thread.State.TERMINATED || t6.getState()!=Thread.State.TERMINATED
-				|| t7.getState()!=Thread.State.TERMINATED || t8.getState()!=Thread.State.TERMINATED
-				|| t9.getState()!=Thread.State.TERMINATED || t10.getState()!=Thread.State.TERMINATED
-				|| t11.getState()!=Thread.State.TERMINATED || t12.getState()!=Thread.State.TERMINATED){}
-		*/
 		
 		
-		
-		// RTree file builder >>>>>>>>>>>>>>>>>>>
-		/*Random random = new Random();
-		for(int i=0;i<1000;i++)
-		{
-			int size = 4;
-			LinkedList<Integer> l = new LinkedList<Integer>();
-			for(int j=0;j<size;j++)
-				l.add(random.nextInt());
-			Collections.sort(l);
-			tree.insert(new Rectangle(2, l.get(0), l.get(2), l.get(1), l.get(3)));
-		}
-		
-		
-		
-		/*tree.insert(r19);tree.insert(r18);tree.insert(r17);
-		tree.insert(r16);tree.insert(r15);tree.insert(r14);
-		tree.insert(r13);tree.insert(r12);tree.insert(r11);
-		tree.insert(r10);tree.insert(r9);tree.insert(r8);
-		/*queue.add(tree.root);
-		queue.add(new InternalNode(tree.m, tree.M, Integer.MAX_VALUE,
-				tree.root.bounds));
-		tree.printHybrid(queue);*/
-		
-		
-		
-		/*queue.add(tree.root);
-		queue.add(new InternalNode(tree.m, tree.M, Integer.MAX_VALUE,tree.root.bounds));
-		tree.printRTree(queue);
-		Rectangle r = new Rectangle(2, 0, 19, 6, 11);
-		new Searcher(r, tree);
-		
-		
-		//new Deleter(r, tree);
-		//new Searcher(r, tree);
-		//System.out.println("Search: " + list.size() + " : " + list);
-		
-		
-		//System.out.println(r.contains(r17));
-		/*queue.add(tree.root);
-		queue.add(new InternalNode(tree.m, tree.M, Integer.MAX_VALUE, tree.root.bounds));
-		tree.printBounds(queue);
-		/*tree.root.entries.add(new Entry(
-				new LeafNode(tree.m, tree.M, tree.lsnCount, tree.root.bounds.Clone()),tree.lsnCount++));
-		tree.root.entries.add(new Entry(
-				new InternalNode(tree.m, tree.M, lsnCount, 
-						new Rectangle(tree.dimensions, 3, 4, 2, 6)), lsnCount++));
-		tree.insert(new Rectangle(2, 2,3,4,5));
-		tree.insert(new Rectangle(2, 2,3,4,5));
-		tree.insert(new Rectangle(2, 2,3,4,5));
-		tree.insert(new Rectangle(2, 2,3,4,5));
-		tree.insert(new Rectangle(2, 2,3,4,5));
-		tree.insert(new Rectangle(2, 2,3,4,5));
-		tree.insert(new Rectangle(2, 2,3,4,5));
-		System.out.println("Hello RTree: "+tree.toString());
-		LinkedList<Node> queue = new LinkedList<Node>();
-		queue.addLast(tree.root);
-		queue.addLast(new InternalNode(tree.m, tree.M, Integer.MAX_VALUE, tree.root.bounds));
-		tree.printRTree(queue);
-		queue.addLast(tree.root);
-		queue.addLast(new InternalNode(tree.m, tree.M, Integer.MAX_VALUE, tree.root.bounds));
-		tree.printBounds(queue);
-		Rectangle r = new Rectangle(2, 2,2,5,5);
-		System.out.println(tree.search(r));*/
-		/*Rectangle r6 = new Rectangle(1, 3,8);
-		Rectangle r5 = new Rectangle(1, 10,11);
-		Rectangle r4 = new Rectangle(1, 7,9);
-		Rectangle r3 = new Rectangle(1, 5,6);
-		Rectangle r2 = new Rectangle(1, 2,4);
-		Rectangle r1 = new Rectangle(1, 0,1);
-		System.out.println(r1.contains(r6));
-		System.out.println(r2.contains(r6));
-		System.out.println(r3.contains(r6));
-		System.out.println(r4.contains(r6));
-		System.out.println(r5.contains(r6));*/
-		
-		/*try
-		{
-			FileOutputStream f = new FileOutputStream("RTree");
-			ObjectOutputStream o = new ObjectOutputStream(f);
-			o.writeObject(tree);
-			o.close();
-		}catch(Exception e)
-		{
-			e.printStackTrace();
-		}*/
 		
 	}
 	
@@ -280,7 +144,7 @@ public class RTree implements Serializable
 		}
 	}
 	
-	void findLeaf(InternalNode n, int lsnExpected, Rectangle rec, Stack<InternalNode> stack)
+	private void findLeaf(InternalNode n, int lsnExpected, Rectangle rec, Stack<InternalNode> stack)
 	{
 		if(n.entries.isEmpty() || n.entries.getFirst().node.getClass().getSimpleName().equals("LeafNode"))
 		{
@@ -341,7 +205,7 @@ public class RTree implements Serializable
 		
 	}
 
-	void updateParent(InternalNode p, Stack<InternalNode> stack)
+	private void updateParent(InternalNode p, Stack<InternalNode> stack)
 	{
 		if(stack.isEmpty())
 		{
@@ -388,7 +252,7 @@ public class RTree implements Serializable
 		}
 	}
 	
-	void extendParent(InternalNode p, InternalNode q, Stack<InternalNode> stack)
+	private void extendParent(InternalNode p, InternalNode q, Stack<InternalNode> stack)
 	{
 		if(stack.isEmpty())
 		{
@@ -460,7 +324,7 @@ public class RTree implements Serializable
 		}
 	}
 	
-	LinkedList<LeafNode> search(Rectangle rec)
+	public LinkedList<LeafNode> search(Rectangle rec)
 	{
 		LinkedList<LeafNode> result = new LinkedList<LeafNode>();
 		Stack<Integer> lsns = new Stack<Integer>();
@@ -471,7 +335,7 @@ public class RTree implements Serializable
 		return result;
 	}
 	
-	void reduceStack(Rectangle rec, Stack<Node> stack, Stack<Integer> lsns, LinkedList<LeafNode> result)
+	private void reduceStack(Rectangle rec, Stack<Node> stack, Stack<Integer> lsns, LinkedList<LeafNode> result)
 	{
 		while(! stack.isEmpty())
 		{
@@ -513,7 +377,7 @@ public class RTree implements Serializable
 		}
 	}
 	
-	void delete(Rectangle rec)
+	public void delete(Rectangle rec)
 	{
 		LinkedList<LeafNode> result = new LinkedList<LeafNode>();
 		Stack<Integer> lsns = new Stack<Integer>();
@@ -525,7 +389,7 @@ public class RTree implements Serializable
 			result.get(i).deleted = true;
 	}
 	
-	void save(String fileName)
+	public void save(String fileName)
 	{
 		try
 		{
@@ -539,13 +403,38 @@ public class RTree implements Serializable
 		}
 	}
 	
+	public static RTree readRTree(String fileName)
+	{
+		RTree tree = null;
+		try 
+		{
+			FileInputStream fi = new FileInputStream(fileName);
+			ObjectInputStream oi = new ObjectInputStream(fi);
+			tree = (RTree) oi.readObject();
+			oi.close();
+		} catch (Exception ex) 
+		{
+			ex.printStackTrace();
+		}
+		
+		return tree;
+	}
+	
 	public String toString() 
 	{
 		return "RTree [m=" + m + ", M=" + M + ", dimensions=" + dimensions
 				+ ", root=" + root + "]";
 	}
 	
-	public void printRTree(LinkedList<Node> queue)
+	public void printRTree()
+	{
+		LinkedList<Node> queue = new LinkedList<Node>();
+		queue.add(this.root);
+		queue.add(new InternalNode(this.m, this.M, Integer.MAX_VALUE,this.root.bounds));
+		printRTree(queue);
+	}
+	
+	private void printRTree(LinkedList<Node> queue)
 	{
 		if(queue.isEmpty())
 			return;
@@ -575,7 +464,15 @@ public class RTree implements Serializable
 		printRTree(queue);
 	}
 	
-	public void printBounds(LinkedList<Node> queue)
+	public void printBounds()
+	{
+		LinkedList<Node> queue = new LinkedList<Node>();
+		queue.add(this.root);
+		queue.add(new InternalNode(this.m, this.M, Integer.MAX_VALUE,this.root.bounds));
+		printBounds(queue);
+	}
+	
+	private void printBounds(LinkedList<Node> queue)
 	{
 		if(queue.isEmpty())
 			return;
@@ -605,7 +502,15 @@ public class RTree implements Serializable
 		printBounds(queue);
 	}
 	
-	public void printHybrid(LinkedList<Node> queue)
+	public void printHybrid()
+	{
+		LinkedList<Node> queue = new LinkedList<Node>();
+		queue.add(this.root);
+		queue.add(new InternalNode(this.m, this.M, Integer.MAX_VALUE,this.root.bounds));
+		printHybrid(queue);
+	}
+	
+	private void printHybrid(LinkedList<Node> queue)
 	{
 		if(queue.isEmpty())
 			return;
@@ -635,4 +540,80 @@ public class RTree implements Serializable
 		System.out.print(s);
 		printHybrid(queue);
 	}
+	
+	public static RTree proveCorrectness()
+	{
+		Rectangle r8 = new Rectangle(2, 1,2,11,13);
+		Rectangle r9 = new Rectangle(2, 5,6,15,16);
+		Rectangle r10 = new Rectangle(2, 5,6,12,14);
+		Rectangle r11 = new Rectangle(2, 8,10,5,17);
+		Rectangle r12 = new Rectangle(2, 4,9,9,11);
+		Rectangle r13 = new Rectangle(2, 12,13,9,16);
+		Rectangle r14 = new Rectangle(2, 11,13,11,13);
+		Rectangle r15 = new Rectangle(2, 0,1,0,3);
+		Rectangle r16 = new Rectangle(2, 2,7,2,8);
+		Rectangle r17 = new Rectangle(2, 14,19,6,9);
+		Rectangle r18 = new Rectangle(2, 15,17,1,10);
+		Rectangle r19 = new Rectangle(2, 16,18,4,7);
+		
+		RTree tree = new RTree(1, 3, 2);
+		
+		tree.insert(r19);tree.insert(r18);tree.insert(r17);
+		tree.insert(r16);tree.insert(r15);tree.insert(r14);
+		tree.insert(r13);tree.insert(r12);tree.insert(r11);
+		tree.insert(r10);tree.insert(r9);tree.insert(r8);
+		
+		tree.printRTree();
+		System.out.println();
+		
+		Rectangle r = new Rectangle(2, 0, 19, 6, 11);
+		
+		LinkedList<LeafNode> list = tree.search(r);
+		System.out.println("Search: " + list.size() + " : " + list + "\n");
+		
+		Rectangle rec = new Rectangle(2, 14, 19, 6, 9); 
+		tree.delete(rec);
+		System.out.println("Rectangle: " + rec + "  deleted!\n");
+		
+		list = tree.search(r);
+		System.out.println("Search: " + list.size() + " : " + list + "\n");
+		
+		tree.printBounds();
+		
+		return tree;
+	}
+
+	public static void buildRTreeToFile(int treeSize, String fileName, int m, int M, int dimensions)
+	{
+		RTree tree = new RTree(m, M, dimensions);
+		
+		Random random = new Random();
+		
+		for(int i=0;i<treeSize;i++)
+		{
+			int size = dimensions * 2;
+			LinkedList<Integer> l = new LinkedList<Integer>();
+			for(int j=0;j<size;j++)
+				l.add(random.nextInt());
+			Collections.sort(l);
+			int[] intervals = new int[size];
+			for(int j=0;j<size;j++)
+				intervals[j] = l.get(j);
+			tree.insert(new Rectangle(dimensions, intervals));
+		}
+		
+		tree.save(fileName);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
