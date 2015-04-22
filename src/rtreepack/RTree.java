@@ -20,14 +20,43 @@ public class RTree implements Serializable
 		root = new InternalNode(m, M, lsnCount++, new Rectangle(dimensions, 0, 0, 0, 0));
 	}
 	
-	public static void main(String[] args)
+	public static void main(String[] args) throws InterruptedException
 	{
-		RTree.proveCorrectness();
-		//RTree.buildRTreeToFile(1000, "", 1, 3, 2);
+		//RTree.proveCorrectness();
+		//RTree.buildRTreeToFile(1000, "RTree1000-3", 1, 3, 2);
+		//RTree.buildRTreeToFile(1000, "RTree1000-6", 3, 6, 2);
+		//RTree.buildRTreeToFile(1000, "RTree1000-10", 5, 10, 2);
+		
+		RTree tree3 = RTree.readRTree("RTree1000-3");
+		RTree tree6 = RTree.readRTree("RTree1000-6");
+		RTree tree10 = RTree.readRTree("RTree1000-10");
+		
+		//tree10.printRTree();
+		
+		int insertions = 1030;
+		
+		for(int i=2;i<insertions;i*=2)
+			new Builder(tree10, i, 1000, 300, true, "RTree test1");
+		
+		for(int i=2;i<insertions;i*=2)
+			new Monitor(tree10, i, 1000, 300, true, "RTree test2").join();
+		
+		/*for(int i=2;i<insertions;i*=2)
+			new Builder(tree6, i, 0, 0, false, "RTree test3");
+		
+		for(int i=2;i<insertions;i*=2)
+			new Monitor(tree6, i, 0, 0, false, "RTree test4").join();
+		
+		for(int i=2;i<insertions;i*=2)
+			new Builder(tree10, i, 0, 0, false, "RTree test5");
+		
+		for(int i=2;i<insertions;i*=2)
+			new Monitor(tree10, i, 0, 0, false, "RTree test6").join();
+		
 		
 		/*RTree tree = null;
 		
-		int insertions = 65;
+		
 		
 		// serial - save batch
 		tree = RTree.readRTree("RTree");

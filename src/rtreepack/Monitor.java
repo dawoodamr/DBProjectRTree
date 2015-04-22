@@ -26,11 +26,15 @@ public class Monitor extends Thread
 	}
 	
 	public void run()
-	{
+	{	
+		int range = 500;
+		
+		int batch = 10000;
+	
 		if(saveBatch)
 		{
 			System.out.println("Monitor " + Monitor.monitorNum + " " + 
-					(saveBatch?"batch-saving":"Xact-saving") + ":\n");
+					(saveBatch?"batch-saving ("+batch+")":"Xact-saving") + " RTree dims: " + tree.dimensions + " node size: " + tree.M + " :\n");
 			long startTime = System.currentTimeMillis();
 			
 			
@@ -43,8 +47,8 @@ public class Monitor extends Thread
 				int index = 0;
 				for(int j=0;j<tree.dimensions;j++)
 				{
-					int l = r.nextInt();
-					int h = r.nextInt();
+					int l = r.nextInt()%range;
+					int h = r.nextInt()%range;
 					if(l>h)
 					{
 						int temp = l;
@@ -64,8 +68,8 @@ public class Monitor extends Thread
 				int index = 0;
 				for(int j=0;j<tree.dimensions;j++)
 				{
-					int l = r.nextInt();
-					int h = r.nextInt();
+					int l = r.nextInt()%range;
+					int h = r.nextInt()%range;
 					if(l>h)
 					{
 						int temp = l;
@@ -85,8 +89,8 @@ public class Monitor extends Thread
 				int index = 0;
 				for(int j=0;j<tree.dimensions;j++)
 				{
-					int l = r.nextInt();
-					int h = r.nextInt();
+					int l = r.nextInt()%range;
+					int h = r.nextInt()%range;
 					if(l>h)
 					{
 						int temp = l;
@@ -101,11 +105,21 @@ public class Monitor extends Thread
 			
 			ExecutorService ex = Executors.newCachedThreadPool();
 			for(int i=0;i<inserters.size();i++)
+			{
 				ex.submit(inserters.get(i));
+				if((i+1)%batch == 0)
+					tree.save(saveFileName);
+			}
 			for(int i=0;i<searchers.size();i++)
+			{
 				ex.submit(searchers.get(i));
+			}
 			for(int i=0;i<deleters.size();i++)
+			{
 				ex.submit(deleters.get(i));
+				if((i+1)%batch == 0)
+					tree.save(saveFileName);
+			}
 			ex.shutdown();
 			try {
 				ex.awaitTermination(10, TimeUnit.SECONDS);
@@ -131,7 +145,7 @@ public class Monitor extends Thread
 			 */
 			
 			System.out.println("Monitor " + Monitor.monitorNum + " " + 
-					(saveBatch?"batch-saving":"Xact-saving") + ":\n");
+					(saveBatch?"batch-saving":"Xact-saving") + " RTree dims: " + tree.dimensions + " node size: " + tree.M + " :\n");
 			long startTime = System.currentTimeMillis();
 			
 			Random r = new Random();
@@ -143,8 +157,8 @@ public class Monitor extends Thread
 				int index = 0;
 				for(int j=0;j<tree.dimensions;j++)
 				{
-					int l = r.nextInt();
-					int h = r.nextInt();
+					int l = r.nextInt()%range;
+					int h = r.nextInt()%range;
 					if(l>h)
 					{
 						int temp = l;
@@ -164,8 +178,8 @@ public class Monitor extends Thread
 				int index = 0;
 				for(int j=0;j<tree.dimensions;j++)
 				{
-					int l = r.nextInt();
-					int h = r.nextInt();
+					int l = r.nextInt()%range;
+					int h = r.nextInt()%range;
 					if(l>h)
 					{
 						int temp = l;
@@ -185,8 +199,8 @@ public class Monitor extends Thread
 				int index = 0;
 				for(int j=0;j<tree.dimensions;j++)
 				{
-					int l = r.nextInt();
-					int h = r.nextInt();
+					int l = r.nextInt()%range;
+					int h = r.nextInt()%range;
 					if(l>h)
 					{
 						int temp = l;

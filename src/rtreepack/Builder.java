@@ -26,10 +26,14 @@ public class Builder
 	
 	public void run()
 	{
+		int range = 500;
+		
+		int batch = 10000;
+		
 		if(saveBatch)
 		{
 			System.out.println("Builder " + Builder.builderNum + " " + 
-					(saveBatch?"batch-saving":"Xact-saving") + ":\n");
+					(saveBatch?"batch-saving ("+batch+")":"Xact-saving") + " RTree dims: " + tree.dimensions + " node size: " + tree.M + " :\n");
 			long startTime = System.currentTimeMillis();
 			
 			Random r = new Random();
@@ -41,8 +45,8 @@ public class Builder
 				int index = 0;
 				for(int j=0;j<tree.dimensions;j++)
 				{
-					int l = r.nextInt();
-					int h = r.nextInt();
+					int l = r.nextInt()%range;
+					int h = r.nextInt()%range;
 					if(l>h)
 					{
 						int temp = l;
@@ -53,6 +57,8 @@ public class Builder
 				}
 				Rectangle rec = new Rectangle(tree.dimensions, dims);
 				tree.insert(rec);
+				if((i+1)%batch == 0)
+					tree.save(saveFileName);
 				//inserters.add(new Inserter(rec, tree));
 			}
 			
@@ -63,8 +69,8 @@ public class Builder
 				int index = 0;
 				for(int j=0;j<tree.dimensions;j++)
 				{
-					int l = r.nextInt();
-					int h = r.nextInt();
+					int l = r.nextInt()%range;
+					int h = r.nextInt()%range;
 					if(l>h)
 					{
 						int temp = l;
@@ -85,8 +91,8 @@ public class Builder
 				int index = 0;
 				for(int j=0;j<tree.dimensions;j++)
 				{
-					int l = r.nextInt();
-					int h = r.nextInt();
+					int l = r.nextInt()%range;
+					int h = r.nextInt()%range;
 					if(l>h)
 					{
 						int temp = l;
@@ -97,6 +103,8 @@ public class Builder
 				}
 				Rectangle rec = new Rectangle(tree.dimensions, dims);
 				tree.delete(rec);
+				if((i+1)%batch == 0)
+					tree.save(saveFileName);
 				//deleters.add(new Deleter(rec, tree));
 			}
 			
@@ -119,7 +127,7 @@ public class Builder
 			 */
 			
 			System.out.println("Builder " + Builder.builderNum + " " + 
-					(saveBatch?"batch-saving":"Xact-saving") + ":\n");
+					(saveBatch?"batch-saving ("+batch+")":"Xact-saving") + " RTree dims: " + tree.dimensions + " node size: " + tree.M + " :\n");
 			long startTime = System.currentTimeMillis();
 			
 			Random r = new Random();
@@ -131,8 +139,8 @@ public class Builder
 				int index = 0;
 				for(int j=0;j<tree.dimensions;j++)
 				{
-					int l = r.nextInt();
-					int h = r.nextInt();
+					int l = r.nextInt()%range;
+					int h = r.nextInt()%range;
 					if(l>h)
 					{
 						int temp = l;
@@ -154,8 +162,8 @@ public class Builder
 				int index = 0;
 				for(int j=0;j<tree.dimensions;j++)
 				{
-					int l = r.nextInt();
-					int h = r.nextInt();
+					int l = r.nextInt()%range;
+					int h = r.nextInt()%range;
 					if(l>h)
 					{
 						int temp = l;
@@ -176,8 +184,8 @@ public class Builder
 				int index = 0;
 				for(int j=0;j<tree.dimensions;j++)
 				{
-					int l = r.nextInt();
-					int h = r.nextInt();
+					int l = r.nextInt()%range;
+					int h = r.nextInt()%range;
 					if(l>h)
 					{
 						int temp = l;
