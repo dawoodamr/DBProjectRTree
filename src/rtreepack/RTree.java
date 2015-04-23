@@ -22,36 +22,150 @@ public class RTree implements Serializable
 	
 	public static void main(String[] args) throws InterruptedException
 	{
-		//RTree.proveCorrectness();
-		//RTree.buildRTreeToFile(1000, "RTree1000-3", 1, 3, 2);
-		//RTree.buildRTreeToFile(1000, "RTree1000-6", 3, 6, 2);
-		//RTree.buildRTreeToFile(1000, "RTree1000-10", 5, 10, 2);
+	//	RTree.proveCorrectness();
+	//	RTree.buildRTreeToFile(1000, "RTree1000-3", 1, 3, 2);
+	//	RTree.buildRTreeToFile(1000, "RTree1000-4", 2, 4, 2);
+	//	RTree.buildRTreeToFile(1000, "RTree1000-5", 2, 5, 2);
+	//	RTree.buildRTreeToFile(1000, "RTree1000-6", 3, 6, 2);
+	//	RTree.buildRTreeToFile(1000, "RTree1000-7", 3, 7, 2);
+	//	RTree.buildRTreeToFile(1000, "RTree1000-8", 4, 8, 2);
+	//	RTree.buildRTreeToFile(1000, "RTree1000-9", 4, 9, 2);
+	//	RTree.buildRTreeToFile(1000, "RTree1000-10", 5, 10, 2);
+	//	RTree.buildRTreeToFile(1000, "RTree1000-11", 5, 11, 2);
+	//	RTree.buildRTreeToFile(1000, "RTree1000-12", 6, 12, 2);
+	//	RTree.buildRTreeToFile(1000, "RTree1000-13", 6, 13, 2);
+	//	RTree.buildRTreeToFile(1000, "RTree1000-14", 7, 14, 2);
 		
-		RTree tree3 = RTree.readRTree("RTree1000-3");
+	//	RTree.buildRTreeToFile(1000, "RTree1000-4", 2, 4, 2);
+	//	RTree.buildRTreeToFile(1000, "RTree1000-8", 4, 8, 2);
+	//	RTree.buildRTreeToFile(1000, "RTree1000-16", 8, 16, 2);
+	//	RTree.buildRTreeToFile(1000, "RTree1000-32", 16, 32, 2);
+	//	RTree.buildRTreeToFile(1000, "RTree1000-64", 32, 64, 2);
+		
+		RTree tree3 = RTree.readRTree("RTree1000-4");
+		RTree tree4 = RTree.readRTree("RTree1000-8");
+		RTree tree5 = RTree.readRTree("RTree1000-16");
+		RTree tree6 = RTree.readRTree("RTree1000-32");
+		RTree tree7 = RTree.readRTree("RTree1000-64");
+		
+	//	for(int i=2;i<insertions;i*=2)
+			new Builder(tree3, 0, 1000, 0, true, "RTree test1");
+		
+	//	for(int i=2;i<insertions;i*=2)
+			new Monitor(tree3, 0, 1000, 0, true, "RTree test2").join();
+			
+	//	for(int i=2;i<insertions;i*=2)
+			new Builder(tree4, 0, 1000, 0, true, "RTree test3");
+		
+	//	for(int i=2;i<insertions;i*=2)
+			new Monitor(tree4, 0, 1000, 0, true, "RTree test4").join();
+			
+	//	for(int i=2;i<insertions;i*=2)
+			new Builder(tree5, 0, 1000, 0, true, "RTree test5");
+		
+	//	for(int i=2;i<insertions;i*=2)
+			new Monitor(tree5, 0, 1000, 0, true, "RTree test6").join();
+
+	//	for(int i=2;i<insertions;i*=2)
+			new Builder(tree6, 0, 1000, 0, true, "RTree test7");
+		
+	//	for(int i=2;i<insertions;i*=2)
+			new Monitor(tree6, 0, 1000, 0, true, "RTree test8").join();
+	
+	//	for(int i=2;i<insertions;i*=2)
+			new Builder(tree7, 0, 1000, 0, true, "RTree test9");
+		
+	//	for(int i=2;i<insertions;i*=2)
+			new Monitor(tree7, 0, 1000, 0, true, "RTree test10").join();
+		
+	/*	RTree tree3 = RTree.readRTree("RTree1000-3");
+		RTree tree4 = RTree.readRTree("RTree1000-4");
+		RTree tree5 = RTree.readRTree("RTree1000-5");
 		RTree tree6 = RTree.readRTree("RTree1000-6");
+		RTree tree7 = RTree.readRTree("RTree1000-7");
+		RTree tree8 = RTree.readRTree("RTree1000-8");
+		RTree tree9 = RTree.readRTree("RTree1000-9");
 		RTree tree10 = RTree.readRTree("RTree1000-10");
+		RTree tree11 = RTree.readRTree("RTree1000-11");
+		RTree tree12 = RTree.readRTree("RTree1000-12");
+		RTree tree13 = RTree.readRTree("RTree1000-13");
+		RTree tree14 = RTree.readRTree("RTree1000-14");
 		
 		//tree10.printRTree();
 		
 		int insertions = 1030;
 		
-		for(int i=2;i<insertions;i*=2)
-			new Builder(tree10, i, 1000, 300, true, "RTree test1");
+/*	//	for(int i=2;i<insertions;i*=2)
+			new Builder(tree3, 0, 1000, 0, true, "RTree test1");
 		
-		for(int i=2;i<insertions;i*=2)
-			new Monitor(tree10, i, 1000, 300, true, "RTree test2").join();
+	//	for(int i=2;i<insertions;i*=2)
+			new Monitor(tree3, 0, 1000, 0, true, "RTree test2").join();
+			
+	//	for(int i=2;i<insertions;i*=2)
+			new Builder(tree4, 0, 1000, 0, true, "RTree test3");
 		
-		/*for(int i=2;i<insertions;i*=2)
-			new Builder(tree6, i, 0, 0, false, "RTree test3");
+	//	for(int i=2;i<insertions;i*=2)
+			new Monitor(tree4, 0, 1000, 0, true, "RTree test4").join();
+			
+	//	for(int i=2;i<insertions;i*=2)
+			new Builder(tree5, 0, 1000, 0, true, "RTree test5");
 		
-		for(int i=2;i<insertions;i*=2)
-			new Monitor(tree6, i, 0, 0, false, "RTree test4").join();
+	//	for(int i=2;i<insertions;i*=2)
+			new Monitor(tree5, 0, 1000, 0, true, "RTree test6").join();
+
+	//	for(int i=2;i<insertions;i*=2)
+			new Builder(tree6, 0, 1000, 0, true, "RTree test7");
 		
-		for(int i=2;i<insertions;i*=2)
-			new Builder(tree10, i, 0, 0, false, "RTree test5");
+	//	for(int i=2;i<insertions;i*=2)
+			new Monitor(tree6, 0, 1000, 0, true, "RTree test8").join();
+	
+	//	for(int i=2;i<insertions;i*=2)
+			new Builder(tree7, 0, 1000, 0, true, "RTree test9");
 		
-		for(int i=2;i<insertions;i*=2)
-			new Monitor(tree10, i, 0, 0, false, "RTree test6").join();
+	//	for(int i=2;i<insertions;i*=2)
+			new Monitor(tree7, 0, 1000, 0, true, "RTree test10").join();
+	
+	//	for(int i=2;i<insertions;i*=2)
+			new Builder(tree8, 0, 1000, 0, true, "RTree test11");
+		
+	//	for(int i=2;i<insertions;i*=2)
+			new Monitor(tree8, 0, 1000, 0, true, "RTree test12").join();
+	
+	//	for(int i=2;i<insertions;i*=2)
+			new Builder(tree9, 0, 1000, 0, true, "RTree test13");
+		
+	//	for(int i=2;i<insertions;i*=2)
+			new Monitor(tree9, 0, 1000, 0, true, "RTree test14").join();
+		
+	//	for(int i=2;i<insertions;i*=2)
+			new Builder(tree10, 0, 1000, 0, true, "RTree test15");
+		
+	//	for(int i=2;i<insertions;i*=2)
+			new Monitor(tree10, 0, 1000, 0, true, "RTree test16").join();
+			
+	//	for(int i=2;i<insertions;i*=2)
+			new Builder(tree11, 0, 1000, 0, true, "RTree test17");
+		
+	//	for(int i=2;i<insertions;i*=2)
+			new Monitor(tree11, 0, 1000, 0, true, "RTree test18").join();
+	
+	//	for(int i=2;i<insertions;i*=2)
+			new Builder(tree12, 0, 1000, 0, true, "RTree test19");
+		
+	//	for(int i=2;i<insertions;i*=2)
+			new Monitor(tree12, 0, 1000, 0, true, "RTree test20").join();
+	
+	//	for(int i=2;i<insertions;i*=2)
+			new Builder(tree13, 0, 1000, 0, true, "RTree test21");
+		
+	//	for(int i=2;i<insertions;i*=2)
+			new Monitor(tree13, 0, 1000, 0, true, "RTree test22").join();
+	
+	//	for(int i=2;i<insertions;i*=2)
+			new Builder(tree14, 0, 1000, 0, true, "RTree test23");
+		
+	//	for(int i=2;i<insertions;i*=2)
+			new Monitor(tree14, 0, 1000, 0, true, "RTree test24").join();
 		
 		
 		/*RTree tree = null;
@@ -99,42 +213,6 @@ public class RTree implements Serializable
 		}*/
 		
 
-		
-		/*Rectangle r8 = new Rectangle(2, 1,2,11,13);
-		Rectangle r9 = new Rectangle(2, 5,6,15,16);
-		Rectangle r10 = new Rectangle(2, 5,6,12,14);
-		Rectangle r11 = new Rectangle(2, 8,10,5,17);
-		Rectangle r12 = new Rectangle(2, 4,9,9,11);
-		Rectangle r13 = new Rectangle(2, 12,13,9,16);
-		Rectangle r14 = new Rectangle(2, 11,13,11,13);
-		Rectangle r15 = new Rectangle(2, 0,1,0,3);
-		Rectangle r16 = new Rectangle(2, 2,7,2,8);
-		Rectangle r17 = new Rectangle(2, 14,19,6,9);
-		Rectangle r18 = new Rectangle(2, 15,17,1,10);
-		Rectangle r19 = new Rectangle(2, 16,18,4,7);
-		
-		Inserter t1 = new Inserter(r19, tree);
-		Inserter t2 = new Inserter(r18, tree);
-		Inserter t3 = new Inserter(r17, tree);
-		Inserter t4 = new Inserter(r16, tree);
-		Inserter t5 = new Inserter(r15, tree);
-		Inserter t6 = new Inserter(r14, tree);
-		Inserter t7 = new Inserter(r13, tree);
-		Inserter t8 = new Inserter(r12, tree);
-		Inserter t9 = new Inserter(r11, tree);
-		Inserter t10 = new Inserter(r10, tree);
-		Inserter t11 = new Inserter(r9, tree);
-		Inserter t12 = new Inserter(r8, tree);*/
-		
-		/*try {
-			t1.join();t2.join();t3.join();t4.join();t5.join();t6.join();
-			t7.join();t8.join();t9.join();t10.join();t11.join();t12.join();
-		} catch (InterruptedException e) 
-		{
-			e.printStackTrace();
-		}*/
-		
-		
 		
 		
 	}
